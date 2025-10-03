@@ -37,10 +37,7 @@ $(document).ready(function() {
             url: '../actions/login_customer_action.php',
             type: 'POST',
             dataType: 'json',
-            data: {
-                email: email,
-                password: password
-            },
+            data: { email: email, password: password },
             success: function(response) {
                 if (response.status === 'success') {
                     Swal.fire({
@@ -49,8 +46,12 @@ $(document).ready(function() {
                         text: response.message,
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            // Always redirect to landing page
-                            window.location.href = 'index.php';
+                            // Redirect based on role
+                            if (response.role === 'admin') {
+                                window.location.href = 'admin_dashboard.php';
+                            } else {
+                                window.location.href = 'customer_view.php';
+                            }
                         }
                     });
                 } else {
