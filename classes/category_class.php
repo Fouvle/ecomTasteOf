@@ -1,119 +1,87 @@
 <?php
-// category_class.php
-include_once(dirname(__FILE__) . '/../settings/db_class.php');
+require_once 'db_class.php';
 
-class Category extends db_connection
-{
-    /**
-     * Add a new category
-     * @param string $cat_name
-     * @param int $created_by
-     * @return bool
-     */
-    public function add_category($cat_name, $created_by)
-    {
-        // prevent SQL injection
-        $cat_name = mysqli_real_escape_string($this->db_conn(), $cat_name);
+class Category extends db_connection {
 
-        $sql = "INSERT INTO categories (cat_name, created_by, is_approved) 
-                VALUES ('$cat_name', $created_by, 0)"; // 0 = pending approval
-        return $this->db_write_query($sql);
+    // Escape helper (optional, safer for queries)
+    private function db_escape($value) {
+        return mysqli_real_escape_string($this->db_conn(), $value);
     }
 
-    /**
-     * Update category name
-     * @param int $cat_id
-     * @param string $new_name
-     * @param int $created_by
-     * @return bool
-     */
-    public function update_category($cat_id, $new_name, $created_by)
-    {
-        $new_name = mysqli_real_escape_string($this->db_conn(), $new_name);
-
-        $sql = "UPDATE categories 
-                SET cat_name = '$new_name' 
-                WHERE cat_id = $cat_id AND created_by = $created_by";
-        return $this->db_write_query($sql);
+    // Add new category (default pending = 0)
+    public function addCategory($name, $userId) {
+        $name = $this->db_escape($name);
+        $userId = intval($userId);
+        $query = "INSERT INTO categories (cat_name, user_id, is_approved) 
+                  VALUES ('$name', $userId, 0)";
+        return $this->db_write_query($query);
     }
 
-    /**
-     * Delete a category
-     * @param int $cat_id
-     * @param int $created_by
-     * @return bool
-     */
-    public function delete_category($cat_id, $created_by)
-    {
-        $sql = "DELETE FROM categories 
-                WHERE cat_id = $cat_id AND created_by = $created_by";
-        return $this->db_write_query($sql);
+    // Approve category
+    public function approveCategory($catId) {
+        $catId = intval($catId);
+        $query = "UPDATE categories SET is_approved = 1 WHERE cat_id = $catId";
+        return $this->db_write_query($query);
     }
 
-    /**
-     * Get a single category by ID
-     * @param int $cat_id
-     * @return array|false
-     */
-    public function get_category($cat_id)
-    {
-        $sql = "SELECT * FROM categories WHERE cat_id = $cat_id";
-        return $this->db_fetch_one($sql);
+    // Reject category
+    public function rejectCategory($catId) {
+        $catId = intval($catId);
+        $query = "UPDATE categories SET is_approved = 2 WHERE cat_id = $catId";
+        return $this->db_write_query($query);
     }
 
-    /**
-     * Get all categories created by a specific user
-     * @param int $created_by
-     * @return array|false
-     */
-    public function get_user_categories($created_by)
-    {
-        $sql = "SELECT * FROM categories WHERE created_by = $created_by";
-        return $this->db_fetch_all($sql);
+    // Update category name (users can edit before approval or resubmit)
+    public function updateCategory($catId, $newName) {
+        $catId = intval($catId);
+        $newName = $this->db_escape($newName);
+        $query = "UPDATE categories SET cat_name = '$newName', is_approved = 0 WHERE cat_id = $catId";
+        return $this->db_write_query($query);
     }
 
-    /**
-     * Get all approved categories (visible to all customers)
-     * @return array|false
-     */
-    public function get_approved_categories()
-    {
-        $sql = "SELECT * FROM categories WHERE is_approved = 1";
-        return $this->db_fetch_all($sql);
+    // Delete category
+    public function deleteCategory($catId) {
+        $catId = intval($catId);
+        $query = "DELETE FROM categories WHERE cat_id = $catId";
+        return $this->db_write_query($query);
     }
 
-    /**
-     * Admin: Approve a category
-     * @param int $cat_id
-     * @return bool
-     */
-    public function approve_category($cat_id)
-    {
-        $sql = "UPDATE categories SET is_approved = 1 WHERE cat_id = $cat_id";
-        return $this->db_write_query($sql);
+    // Get all categories (admin use)
+    public function getAllCategories() {
+        $query = "SELECT * FROM categories";
+        return $this->db_fetch_all($query);
     }
 
-    /**
-     * Admin: Reject (delete) a category
-     * @param int $cat_id
-     * @return bool
-     */
-    public function reject_category($cat_id)
-    {
-        $sql = "DELETE FROM categories WHERE cat_id = $cat_id";
-        return $this->db_write_query($sql);
+    // Get all pending categories
+    public function getPendingCategories() {
+        $query = "SELECT * FROM categories WHERE is_approved = 0";
+        return $this->db_fetch_all($query);
     }
 
-    /**
-     * Admin: View all pending categories
-     * @return array|false
-     */
-    public function get_pending_categories()
-    {
-        $sql = "SELECT c.cat_id, c.cat_name, u.customer_name 
-                FROM categories c
-                JOIN customer u ON c.created_by = u.customer_id
-                WHERE c.is_approved = 0";
-        return $this->db_fetch_all($sql);
+    // Get all rejected categories
+    public function getRejectedCategories() {
+        $query = "SELECT * FROM categories WHERE is_approved = 2";
+        return $this->db_fetch_all($query);
+    }
+
+    // Get approved categories
+    public function getApprovedCategories() {
+        $query = "SELECT * FROM categories WHERE is_approved = 1";
+        return $this->db_fetch_all($query);
+    }
+
+    // Get categories submitted by a specific user
+    public function getUserCategories($userId) {
+        $userId = intval($userId);
+        $query = "SELECT * FROM categories WHERE user_id = $userId";
+        return $this->db_fetch_all($query);
+    }
+
+    // Get one category by ID
+    public function getCategoryById($catId) {
+        $catId = intval($catId);
+        $query = "SELECT * FROM categories WHERE cat_id = $catId";
+        return $this->db_fetch_one($query);
     }
 }
+?>
