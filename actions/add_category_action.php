@@ -9,10 +9,10 @@ if (!isLoggedIn()) {
     exit();
 }
 
-// Check if form data was submitted
+// Handle add category
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $category_name = trim($_POST['category_name']);
-    $user_id = $_SESSION['id']; // logged-in user ID
+    $user_id = $_SESSION['id'];
 
     if (empty($category_name)) {
         echo json_encode([
@@ -22,7 +22,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
 
-    // Call the controller function to add category
     $result = addCategory($user_id, $category_name);
 
     if ($result === true) {
@@ -33,8 +32,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         echo json_encode([
             "status" => "error",
-            "message" => $result // return error message from controller
+            "message" => $result
         ]);
     }
     exit();
 }
+?>
