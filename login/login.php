@@ -1,158 +1,99 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
+<head>
     <meta charset="UTF-8">
-    <title>Login </title>
-      <style>
-        .btn-custom {
-            background-color: #97d198ff;
-            border-color: #97d1aeff;
-            color: #fff;
-            transition: background-color 0.3s, border-color 0.3s;
-        }
+    <title>TasteConnect - Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&family=Pacifico&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-        .btn-custom:hover {
-            background-color: #7ab78bff;
-            border-color: #7ab785ff;
-        }
-
-        .highlight {
-            color: #97d1a7ff;
-            transition: color 0.3s;
-        }
-
-        .highlight:hover {
-            color: #7ab78bff;
-        }
-
+    <style>
         body {
-            /* Base background color */
-            background-color: #f8f9fa;
-
-            /* Gradient-like grid using repeating-linear-gradients */
-            background-image:
-                repeating-linear-gradient(0deg,
-                    #7ab78bff,
-                    #7ab797ff 1px,
-                    transparent 1px,
-                    transparent 20px),
-                repeating-linear-gradient(90deg,
-                    #7ab78bff,
-                    #7ab78bff 1px,
-                    transparent 1px,
-                    transparent 20px),
-                linear-gradient(rgba(183, 122, 122, 0.1),
-                    rgba(183, 122, 122, 0.1));
-
-            /* Blend the gradients for a subtle overlay effect */
+            font-family: 'Playfair Display', serif;
+            background: #faf4ed;
+            background-image: url('../images/boho-pattern.jpg');
+            background-size: cover;
             background-blend-mode: overlay;
-
-            /* Define the size of the grid */
-            background-size: 20px 20px;
-
-            /* Ensure the background covers the entire viewport */
+            background-color: rgba(250, 244, 237, 0.95);
             min-height: 100vh;
             margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-        }
-
-        .login-container {
-            margin-top: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .card {
-            border: none;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background: #fffaf0;
+            border: 2px solid #d7b89c;
+            border-radius: 20px;
+            box-shadow: 0px 8px 18px rgba(0,0,0,0.15);
+            padding: 30px;
+            width: 100%;
+            max-width: 420px;
+            text-align: center;
         }
 
         .card-header {
-            background-color: #D19C97;
-            color: #fff;
+            background: linear-gradient(135deg, #d77a61, #f6bd60);
+            border-radius: 15px 15px 0 0;
+            color: #fffaf0;
+            font-family: 'Pacifico', cursive;
+            font-size: 1.8rem;
+            padding: 15px;
         }
 
-        .animate-pulse-custom {
-            animation: pulse 2s infinite;
+        .form-label {
+            font-weight: 600;
+            color: #35524a;
         }
 
-        @keyframes pulse {
-            0% {
-                transform: scale(1);
-            }
-
-            50% {
-                transform: scale(1.05);
-            }
-
-            100% {
-                transform: scale(1);
-            }
+        .btn-custom {
+            background: linear-gradient(135deg, #d77a61, #f6bd60);
+            border: none;
+            border-radius: 30px;
+            padding: 12px;
+            color: #fffaf0;
+            font-weight: bold;
+            font-family: 'Amatic SC', cursive;
+            font-size: 20px;
+            transition: transform 0.2s;
+        }
+        .btn-custom:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(135deg, #a64b2a, #d49a4a);
         }
 
-        /* Additional Styling for Enhanced Appearance */
-        .form-label i {
-            margin-left: 5px;
-            color: #b77a7a;
+        .highlight {
+            color: #d77a61;
+            font-weight: bold;
         }
-
-        .alert-info {
-            animation: fadeIn 1s;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-
-            to {
-                opacity: 1;
-            }
+        .highlight:hover {
+            color: #814c4c;
         }
     </style>
 </head>
-
 <body>
-    <div class="container login-container">
-        <div class="row justify-content-center animate__animated animate__fadeInDown">
-            <div class="col-md-6">
-                <div class="card animate__animated animate__zoomIn">
-                    <div class="card-header text-center highlight">
-                        <h4>Login</h4>
-                    </div>
-                    <div class="card-body">
-                        <!-- Alert Messages (To be handled by backend) -->
-                        <!-- Example:
-                        <div class="alert alert-info text-center">Login successful!</div>
-                        -->
-
-                        <form method="POST" action="" class="mt-4" id="login-form">
-                            <div class="mb-3">
-                                <label for="email" class="form-label">Email <i class="fa fa-envelope"></i></label>
-                                <input type="email" class="form-control animate__animated animate__fadeInUp" id="email" name="email" required>
-                            </div>
-                            <div class="mb-4">
-                                <label for="password" class="form-label">Password <i class="fa fa-lock"></i></label>
-                                <input type="password" class="form-control animate__animated animate__fadeInUp" id="password" name="password" required>
-                            </div>
-                            <button type="submit" class="btn btn-custom w-100 animate-pulse-custom">Login</button>
-                        </form>
-                    </div>
-                    <div class="card-footer text-center">
-                        Don't have an account? <a href="register.php" class="highlight">Register here</a>.
-                    </div>
+    <div class="card">
+        <div class="card-header">TasteConnect Login</div>
+        <div class="card-body">
+            <form method="POST" action="../actions/login_customer_action.php" id="login-form">
+                <div class="mb-3 text-start">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
                 </div>
-            </div>
+                <div class="mb-4 text-start">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="password" name="password" required>
+                </div>
+                <button type="submit" class="btn btn-custom w-100">Login</button>
+            </form>
+        </div>
+        <div class="card-footer">
+            <p>Don't have an account? <a href="register.php" class="highlight">Register here</a></p>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="../js/login.js"></script>
-
-    
 </body>
-
 </html>
