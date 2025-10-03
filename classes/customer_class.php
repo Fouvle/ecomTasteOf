@@ -1,10 +1,6 @@
 <?php
-
 require_once '../settings/db_class.php';
 
-/**
- * 
- */
 class Customer extends db_connection
 {
     private $customer_id;
@@ -45,7 +41,6 @@ class Customer extends db_connection
         }
     }
 
-
     public function getUserByEmail($email)
     {
         $stmt = $this->db->prepare("SELECT * FROM customer WHERE customer_email = ?");
@@ -54,7 +49,34 @@ class Customer extends db_connection
         return $stmt->get_result()->fetch_assoc();
     }
 
-    
+    // Register new customer
+    public function registerCustomer($name, $email, $password, $country, $city, $phone_number, $role = 2, $imagePath = null)
+    {
+        // check if email already exists
+        $existingUser = $this->getUserByEmail($email);
+        if ($existingUser) {
+            return false; // email already taken
+        }
+
+        $stmt = $this->db->prepare("INSERT INTO customer (customer_name, customer_email, customer_pass, customer_country, customer_city, customer_contact, user_role, customer_image, date_created) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())");
+
+        $stmt->bind_param("ssssssis",
+            $name,
+            $email,
+            $password,
+            $country,
+            $city,
+            $phone_number,
+            $role,
+            $imagePath
+        );
+
+        if ($stmt->execute()) {
+            return $stmt->insert_id; // return customer_id
+        }
+        return false;
+    }
 
     // edit customer details
     public function editUser($name, $email, $phone_number)
@@ -83,19 +105,17 @@ class Customer extends db_connection
         return false;
     }
 
-   //checking password stored in database
-   public function verifyPassword($password)
-   {
-       if (!$this->customer_id) {
-           return false;
-       }
-       $user = $this->getUserByEmail($this->email);
-       if ($user && password_verify($password, $user['customer_pass'])) {
-           return true;
-       }
-       return false;
-   }
-
-    
+    // verifying password
+    public function verifyPassword($password)
+    {
+        if (!$this->customer_id) {
+            return false;
+        }
+        $user = $this->getUserByEmail($this->email);
+        if ($user && password_verify($password, $user['customer_pass'])) {
+            return true;
+        }
+        return false;
+    }
 }
 ?>
