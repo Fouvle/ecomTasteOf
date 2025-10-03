@@ -28,15 +28,17 @@ class Customer extends db_connection
         if (!$this->customer_id) {
             return false;
         }
+
         $stmt = $this->db->prepare("SELECT * FROM customer WHERE customer_id = ?");
         $stmt->bind_param("i", $this->customer_id);
         $stmt->execute();
         $result = $stmt->get_result()->fetch_assoc();
+
         if ($result) {
             $this->name = $result['customer_name'];
             $this->email = $result['customer_email'];
             $this->role = $result['user_role'];
-            $this->date_created = isset($result['date_created']) ? $result['date_created'] : null;
+            $this->date_created = $result['date_created'] ?? null;
             $this->phone_number = $result['customer_contact'];
         }
     }
@@ -49,52 +51,35 @@ class Customer extends db_connection
         return $stmt->get_result()->fetch_assoc();
     }
 
-    // Register new customer
-    public function registerCustomer($name, $email, $password, $country, $city, $phone_number, $role = 2, $imagePath = null)
+    // Register user
+    public function registerUser($name, $email, $password, $phone_number, $role)
     {
         // check if email already exists
-        $existingUser = $this->getUserByEmail($email);
-        if ($existingUser) {
-            return false; // email already taken
+        $stmt = $this->db->prepare("SELECT customer_id FROM customer WHERE customer_email = ?");
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($result->num_rows > 0) {
+            return false; // email already exists
         }
 
-        $stmt = $this->db->prepare("INSERT INTO customer (customer_name, customer_email, customer_pass, customer_country, customer_city, customer_contact, user_role, customer_image, date_created) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())");
-
-        $stmt->bind_param("ssssssis",
-            $name,
-            $email,
-            $password,
-            $country,
-            $city,
-            $phone_number,
-            $role,
-            $imagePath
-        );
+        // insert new customer
+        $stmt = $this->db->prepare("INSERT INTO customer 
+            (customer_name, customer_email, customer_pass, customer_contact, user_role, customer_country, customer_city) 
+            VALUES (?, ?, ?, ?, ?, '', '')");
+        $stmt->bind_param("ssssi", $name, $email, $password, $phone_number, $role);
 
         if ($stmt->execute()) {
-            return $stmt->insert_id; // return customer_id
+            return $this->db->insert_id; // return new customer ID
         }
         return false;
     }
 
-    // edit customer details
-    public function editUser($name, $email, $phone_number)
-    {
-        if (!$this->customer_id) {
-            return false;
-        }
-        $stmt = $this->db->prepare("UPDATE customer SET customer_name = ?, customer_email = ?, customer_contact = ? WHERE customer_id = ?");
-        $stmt->bind_param("sssi", $name, $email, $phone_number, $this->customer_id);
-        return $stmt->execute();
-    }
-
-    // change customer password
+    // Change password
     public function changePassword($old_password, $new_password)
     {
-        if (!$this->customer_id) {
-            return false;
-        }
+        if (!$this->customer_id) return false;
+
         $user = $this->getUserByEmail($this->email);
         if ($user && password_verify($old_password, $user['customer_pass'])) {
             $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
@@ -105,12 +90,11 @@ class Customer extends db_connection
         return false;
     }
 
-    // verifying password
+    // Verify password
     public function verifyPassword($password)
     {
-        if (!$this->customer_id) {
-            return false;
-        }
+        if (!$this->customer_id) return false;
+
         $user = $this->getUserByEmail($this->email);
         if ($user && password_verify($password, $user['customer_pass'])) {
             return true;
