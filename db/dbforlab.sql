@@ -209,6 +209,8 @@ ALTER TABLE `categories`
   MODIFY `cat_id` int(11) NOT NULL AUTO_INCREMENT;
   ADD COLUMN created_by INT NOT NULL AFTER cat_name,
   ADD FOREIGN KEY (created_by) REFERENCES customer(customer_id);
+  ADD COLUMN is_approved TINYINT(1) DEFAULT 0;
+
  
 --
 -- AUTO_INCREMENT for table `customer`
