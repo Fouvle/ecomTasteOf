@@ -39,7 +39,7 @@ function isAdmin()
 function requireLogin()
 {
     if (!isLoggedIn()) {
-        header("Location: ../Login/login_register.php");
+        header("Location: ../Login/login.php");
         exit;
     }
 }
