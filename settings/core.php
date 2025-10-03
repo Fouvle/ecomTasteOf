@@ -39,7 +39,7 @@ function isAdmin()
 function requireLogin()
 {
     if (!isLoggedIn()) {
-        header("Location: ../Login/login.php");
+        header("Location: ../login/login.php");
         exit;
     }
 }
@@ -52,7 +52,7 @@ function requireAdmin()
 {
     if (!isAdmin()) {
         // Redirect non-admins to regular dashboard
-        header("Location: ../dashboard.php");
+        header("Location: ..views/customer_view.php");
         exit;
     }
 }
