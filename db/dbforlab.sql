@@ -9,8 +9,8 @@ SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
 
-CREATE DATABASE IF NOT EXISTS `shoppn`;
-USE `shoppn`;
+CREATE DATABASE IF NOT EXISTS ` ecommerce_2025A_nana_nkrumah`;
+USE `ecommerce_2025A_nana_nkrumah`;
 
 -- --------------------------------------------------------
 -- Table structure for table `brands`
