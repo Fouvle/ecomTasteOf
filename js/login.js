@@ -1,5 +1,5 @@
-$(document).ready(function() {
-    $('#login-form').submit(function(e) {
+$(document).ready(function () {
+    $('#login-form').submit(function (e) {
         e.preventDefault();
 
         let email = $('#email').val().trim();
@@ -38,12 +38,13 @@ $(document).ready(function() {
             type: 'POST',
             dataType: 'json',
             data: { email: email, password: password },
-            success: function(response) {
+            success: function (response) {
                 if (response.status === 'success') {
                     Swal.fire({
                         icon: 'success',
                         title: 'Welcome ' + response.name,
                         text: response.message,
+                        showConfirmButton: true
                     }).then((result) => {
                         if (result.isConfirmed) {
                             // Redirect based on role
@@ -62,7 +63,7 @@ $(document).ready(function() {
                     });
                 }
             },
-            error: function() {
+            error: function () {
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
@@ -70,5 +71,10 @@ $(document).ready(function() {
                 });
             }
         });
+    });
+
+    // Optional: redirect user if they try to click a "Login" button without filling form
+    $('#login-button').on('click', function () {
+        $('#login-form').submit();
     });
 });
