@@ -46,7 +46,7 @@ $(document).ready(function() {
                         if (result.isConfirmed) {
                             if (response.role == 1) {
                                 // Redirect admin
-                                window.location.href = '../admin/dashboard.php';
+                                window.location.href = '../admin/admin_dashboard.php';
                             } else {
                                 // Redirect customer
                                 window.location.href = '../login/login.php';

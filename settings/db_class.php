@@ -1,5 +1,5 @@
 <?php
-include_once 'db_cred.php';
+include_once 'db_cred_local.php';
 
 /**
  *@version 1.1
