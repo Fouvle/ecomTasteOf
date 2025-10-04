@@ -5,7 +5,7 @@ require_once "../Controllers/category_controller.php";
 
 // Ensure user is logged in
 if (!isLoggedIn()) {
-    header("Location: ../Login/login_register.php");
+    header("Location: ../Login/login.php");
     exit();
 }
 
