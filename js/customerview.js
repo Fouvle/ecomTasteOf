@@ -1,214 +1,129 @@
-// Category Management JavaScript
-class CategoryManager {
-    constructor() {
-        this.selectedCategoryId = null;
-        this.modal = null;
-        this.init();
-    }
+$(document).ready(function() {
+    let selectedCategoryId = null;
 
-    init() {
-        this.initializeModal();
-        this.bindEvents();
-        this.loadCategories();
-    }
+    //  Fetch and display all user categories
+    function loadCategories() {
+        $.ajax({
+            url: "../actions/fetch_category_action.php",
+            method: "GET",
+            dataType: "json",
+            success: function(response) {
+                const tbody = $("#categoryTable tbody");
+                tbody.empty();
 
-    initializeModal() {
-        const modalElement = document.getElementById('categoryModal');
-        if (modalElement) {
-            this.modal = new bootstrap.Modal(modalElement);
-        }
-    }
-
-    bindEvents() {
-        // Add category form submission
-        document.getElementById('addCategoryForm')?.addEventListener('submit', (e) => {
-            e.preventDefault();
-            this.addCategory();
-        });
-
-        // Save category changes
-        document.getElementById('saveCategoryBtn')?.addEventListener('click', () => {
-            this.updateCategory();
-        });
-
-        // Delete category
-        document.getElementById('deleteCategoryBtn')?.addEventListener('click', () => {
-            this.deleteCategory();
-        });
-
-        // View category button clicks (delegated)
-        document.addEventListener('click', (e) => {
-            if (e.target.classList.contains('view-category-btn')) {
-                this.openCategoryModal(e.target);
-            }
-        });
-    }
-
-    async loadCategories() {
-        try {
-            const response = await fetch('../Actions/get_categories_action.php', {
-                method: 'GET',
-                credentials: 'same-origin'
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to load categories');
-            }
-
-            const categories = await response.json();
-            this.renderCategories(categories);
-        } catch (error) {
-            console.error('Error loading categories:', error);
-            alert('Failed to load categories: ' + error.message);
-        }
-    }
-
-    renderCategories(categories) {
-        const tbody = document.querySelector('table tbody');
-        if (!tbody) return;
-
-        tbody.innerHTML = categories.map((category, index) => `
-            <tr>
-                <td>${index + 1}</td>
-                <td>${this.escapeHtml(category.category_name)}</td>
-                <td>${this.getStatusBadge(category.is_approved)}</td>
-                <td>
-                    <button class="btn btn-info btn-sm view-category-btn" 
-                            data-id="${category.category_id}" 
-                            data-name="${this.escapeHtml(category.category_name)}">
-                        View / Edit
-                    </button>
-                </td>
-            </tr>
-        `).join('');
-    }
-
-    getStatusBadge(status) {
-        const statusMap = {
-            1: { class: 'bg-success', text: 'Approved' },
-            2: { class: 'bg-danger', text: 'Rejected' },
-            0: { class: 'bg-warning text-dark', text: 'Pending' }
-        };
-        
-        const statusInfo = statusMap[status] || statusMap[0];
-        return `<span class="badge ${statusInfo.class}">${statusInfo.text}</span>`;
-    }
-
-    openCategoryModal(button) {
-        this.selectedCategoryId = button.getAttribute('data-id');
-        document.getElementById('catId').value = this.selectedCategoryId;
-        document.getElementById('catName').value = button.getAttribute('data-name');
-        
-        if (this.modal) {
-            this.modal.show();
-        }
-    }
-
-    async addCategory() {
-        const form = document.getElementById('addCategoryForm');
-        const formData = new FormData(form);
-        const categoryName = document.getElementById('newCategoryName').value.trim();
-
-        if (!categoryName) {
-            alert('Please enter a category name');
-            return;
-        }
-
-        try {
-            const response = await fetch('../Actions/add_category_action.php', {
-                method: 'POST',
-                body: formData
-            });
-
-            const result = await response.json();
-            
-            if (result.status === 'success') {
-                alert(result.message);
-                form.reset();
-                this.loadCategories(); // Refresh the categories list
-            } else {
-                alert('Error: ' + result.message);
-            }
-        } catch (error) {
-            console.error('Add category error:', error);
-            alert('Add failed: ' + error.message);
-        }
-    }
-
-    async updateCategory() {
-        const form = document.getElementById('editCategoryForm');
-        const formData = new FormData(form);
-
-        try {
-            const response = await fetch('../Actions/update_category_action.php', {
-                method: 'POST',
-                body: formData
-            });
-
-            const result = await response.json();
-            
-            if (result.status === 'success') {
-                alert(result.message);
-                if (this.modal) {
-                    this.modal.hide();
+                if (response.length === 0) {
+                    tbody.append(`<tr><td colspan="4" class="text-center">No categories found.</td></tr>`);
+                    return;
                 }
-                this.loadCategories(); // Refresh the categories list
-            } else {
-                alert('Error: ' + result.message);
+
+                response.forEach((cat, index) => {
+                    const statusBadge = cat.is_approved == 1
+                        ? "<span class='badge bg-success'>Approved</span>"
+                        : cat.is_approved == 2
+                            ? "<span class='badge bg-danger'>Rejected</span>"
+                            : "<span class='badge bg-warning text-dark'>Pending</span>";
+
+                    tbody.append(`
+                        <tr>
+                            <td>${index + 1}</td>
+                            <td>${cat.category_name}</td>
+                            <td>${statusBadge}</td>
+                            <td>
+                                <button class="btn btn-info btn-sm view-category-btn" 
+                                        data-id="${cat.category_id}" 
+                                        data-name="${cat.category_name}">
+                                    View / Edit
+                                </button>
+                            </td>
+                        </tr>
+                    `);
+                });
+            },
+            error: function() {
+                alert("Failed to fetch categories.");
             }
-        } catch (error) {
-            console.error('Update category error:', error);
-            alert('Update failed: ' + error.message);
-        }
+        });
     }
 
-    async deleteCategory() {
-        if (!this.selectedCategoryId) {
-            alert('No category selected');
+    //  Handle adding a new category
+    $("#addCategoryForm").submit(function(e) {
+        e.preventDefault();
+        const categoryName = $("#newCategoryName").val().trim();
+        if (categoryName === "") {
+            alert("Please enter a category name.");
             return;
         }
 
-        if (!confirm('Are you sure you want to delete this category?')) {
-            return;
-        }
-
-        try {
-            const formData = new FormData();
-            formData.append('category_id', this.selectedCategoryId);
-
-            const response = await fetch('../Actions/delete_category_action.php', {
-                method: 'POST',
-                body: formData
-            });
-
-            const result = await response.json();
-            
-            if (result.status === 'success') {
-                alert(result.message);
-                if (this.modal) {
-                    this.modal.hide();
+        $.ajax({
+            url: "../actions/add_category_action.php",
+            type: "POST",
+            data: { category_name: categoryName },
+            dataType: "json",
+            success: function(response) {
+                alert(response.message);
+                if (response.status === "success") {
+                    $("#newCategoryName").val("");
+                    loadCategories();
                 }
-                this.loadCategories(); // Refresh the categories list
-            } else {
-                alert('Error: ' + result.message);
+            },
+            error: function() {
+                alert("Error adding category.");
             }
-        } catch (error) {
-            console.error('Delete category error:', error);
-            alert('Delete failed: ' + error.message);
-        }
-    }
+        });
+    });
 
-    escapeHtml(unsafe) {
-        return unsafe
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;");
-    }
-}
+    //  Open modal for edit
+    $(document).on("click", ".view-category-btn", function() {
+        selectedCategoryId = $(this).data("id");
+        $("#catId").val($(this).data("id"));
+        $("#catName").val($(this).data("name"));
 
-// Initialize category manager when DOM is loaded
-document.addEventListener('DOMContentLoaded', function() {
-    new CategoryManager();
+        const modal = new bootstrap.Modal(document.getElementById("categoryModal"));
+        modal.show();
+    });
+
+    //  Update category
+    $("#saveCategoryBtn").click(function() {
+        $.ajax({
+            url: "../actions/update_category_action.php",
+            type: "POST",
+            data: $("#editCategoryForm").serialize(),
+            dataType: "json",
+            success: function(response) {
+                alert(response.message);
+                if (response.status === "success") {
+                    $("#categoryModal").modal("hide");
+                    loadCategories();
+                }
+            },
+            error: function() {
+                alert("Error updating category.");
+            }
+        });
+    });
+
+    //  Delete category
+    $("#deleteCategoryBtn").click(function() {
+        if (!confirm("Are you sure you want to delete this category?")) return;
+
+        $.ajax({
+            url: "../actions/delete_category_action.php",
+            type: "POST",
+            data: { category_id: selectedCategoryId },
+            dataType: "json",
+            success: function(response) {
+                alert(response.message);
+                if (response.status === "success") {
+                    $("#categoryModal").modal("hide");
+                    loadCategories();
+                }
+            },
+            error: function() {
+                alert("Error deleting category.");
+            }
+        });
+    });
+
+    //  Initial load
+    loadCategories();
 });
