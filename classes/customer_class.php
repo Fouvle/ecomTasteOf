@@ -67,9 +67,9 @@ class Customer extends db_connection
 
         // insert new customer
         $stmt = $this->db->prepare("INSERT INTO customer 
-            (customer_name, customer_email, customer_pass, customer_contact, user_role, customer_country, customer_city) 
+            (customer_name, customer_email, customer_pass, customer_contact, customer_country, customer_city, user_role) 
             VALUES (?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("ssssssi", $name, $email, $password, $phone_number, $role, $country, $city);
+        $stmt->bind_param("ssssssi", $name, $email, $password, $phone_number, $country, $city, $role);
 
         if ($stmt->execute()) {
             return $this->db->insert_id; // return new customer ID
