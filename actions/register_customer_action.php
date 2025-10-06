@@ -13,11 +13,13 @@ if (isset($_SESSION['customer_id'])) {
 
 require_once '../controllers/customer_controller.php';
 
-$name = $_POST['name'];
-$email = $_POST['email'];
-$password = $_POST['password'];
-$phone_number = $_POST['phone_number'];
-$role = $_POST['role'];
+$name = $_POST['customer_name'];
+$email = $_POST['customer_email'];
+$password = $_POST['customer_pass'];
+$country = $_POST['customer_country'];
+$city = $_POST['customer_city'];
+$phone_number = $_POST['customer_contact'];
+$role = $_POST['customer_role'];
 
 // Ensure role is either 0 (customer) or 1 (admin)
 $role = ($role == "admin") ? 1 : 0;
