@@ -29,4 +29,10 @@ function add_category_ctr($kwargs) {
         return "Failed to add category. It might already exist.";
     }
 }
+
+function getUserCategories($user_id) {
+    $category = new Category();
+    return $category->getAllCategories();
+}
+
 ?>

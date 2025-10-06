@@ -1,11 +1,11 @@
 <?php
 session_start();
-require_once "../Settings/core.php";
-require_once "../Controllers/category_controller.php";
+require_once "../settings/core.php";
+require_once "../controllers/category_controller.php";
 
 // Ensure user is logged in
 if (!isLoggedIn()) {
-    header("Location: ../Login/login.php");
+    header("Location: ../login/login.php");
     exit();
 }
 
