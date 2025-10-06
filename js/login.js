@@ -48,7 +48,7 @@ $(document).ready(function () {
                     }).then((result) => {
                         if (result.isConfirmed) {
                             // Redirect based on role
-                            if (response.role === 2) {
+                            if (response.role === 1) {
                                 window.location.href = '../admin/admin_dashboard.php';
                             } else {
                                 window.location.href = '../views/customer_view.php';

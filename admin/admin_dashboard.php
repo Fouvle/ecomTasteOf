@@ -2,7 +2,7 @@
 session_start();
 require_once '../classes/category_class.php';
 
-if (!isset($_SESSION['customer_id']) || $_SESSION['role'] !== 'admin') {
+if (!isset($_SESSION['customer_id']) || $_SESSION['role'] !== 1) {
     header('Location: ../login/login.php');
     exit();
 }
