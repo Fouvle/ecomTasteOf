@@ -124,6 +124,6 @@ $(document).ready(function() {
         });
     });
 
-    //  Initial load
+    // Initial load
     loadCategories();
 });
