@@ -46,7 +46,7 @@ if (empty($email) || empty($password)) {
 }
 
 // Fetch customer by email
-$customer = get_customer_by_email_ctr($email);
+$customer = login_customer_ctr($email, $password);
 
 if ($customer) {
     if (password_verify($password, $customer['customer_pass'])) {  // NOTE: matches DB column

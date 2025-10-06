@@ -1,6 +1,6 @@
 $(document).ready(function () {
     $('#login-form').submit(function (e) {
-        e.preventDefault();
+        e.preventDefault(); // Prevent default form submission
 
         let email = $('#email').val().trim();
         let password = $('#password').val().trim();
@@ -48,10 +48,10 @@ $(document).ready(function () {
                     }).then((result) => {
                         if (result.isConfirmed) {
                             // Redirect based on role
-                            if (response.role === 'admin') {
-                                window.location.href = 'admin_dashboard.php';
+                            if (response.role === 2) {
+                                window.location.href = '../admin/admin_dashboard.php';
                             } else {
-                                window.location.href = 'customer_view.php';
+                                window.location.href = '../views/customer_view.php';
                             }
                         }
                     });
@@ -71,10 +71,5 @@ $(document).ready(function () {
                 });
             }
         });
-    });
-
-    // Optional: redirect user if they try to click a "Login" button without filling form
-    $('#login-button').on('click', function () {
-        $('#login-form').submit();
     });
 });

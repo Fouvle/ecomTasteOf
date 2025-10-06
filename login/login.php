@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>TasteConnect - Login</title>
@@ -25,7 +26,7 @@
             background: #fffaf0;
             border: 2px solid #d7b89c;
             border-radius: 20px;
-            box-shadow: 0px 8px 18px rgba(0,0,0,0.15);
+            box-shadow: 0px 8px 18px rgba(0, 0, 0, 0.15);
             padding: 30px;
             width: 100%;
             max-width: 420px;
@@ -57,6 +58,7 @@
             font-size: 20px;
             transition: transform 0.2s;
         }
+
         .btn-custom:hover {
             transform: translateY(-2px);
             background: linear-gradient(135deg, #a64b2a, #d49a4a);
@@ -66,16 +68,18 @@
             color: #d77a61;
             font-weight: bold;
         }
+
         .highlight:hover {
             color: #814c4c;
         }
     </style>
 </head>
+
 <body>
     <div class="card">
         <div class="card-header">TasteConnect Login</div>
         <div class="card-body">
-            <form method="POST" action="../actions/login_customer_action.php" id="login-form">
+            <form method="POST" id="login-form">
                 <div class="mb-3 text-start">
                     <label for="email" class="form-label">Email</label>
                     <input type="email" class="form-control" id="email" name="email" required>
@@ -96,4 +100,5 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="../js/login.js"></script>
 </body>
+
 </html>
