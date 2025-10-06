@@ -1,59 +1,64 @@
 <?php
-// Settings/core.php
-session_start();
-
-// For header redirection
-ob_start();
+// core.php - Core functions for session management
 
 /**
- * Function to check if a user is logged in
- * @return bool
+ * Check if user is logged in
  */
-function isLoggedIn()
-{
-    return isset($_SESSION['id']);
+function isLoggedIn() {
+    return isset($_SESSION['user_id']) && 
+           isset($_SESSION['logged_in']) && 
+           $_SESSION['logged_in'] === true;
 }
 
 /**
- * Function to get the logged-in user ID
- * @return mixed|null
+ * Redirect if not logged in
  */
-function getUserId()
-{
-    return isset($_SESSION['id']) ? $_SESSION['id'] : null;
-}
-
-/**
- * Function to check if user has admin privileges
- * @return bool
- */
-function isAdmin()
-{
-    return (isset($_SESSION['role']) && $_SESSION['role'] === 'admin');
-}
-
-/**
- * Enforce login requirement:
- * Call this at the top of protected pages
- */
-function requireLogin()
-{
+function redirectIfNotLoggedIn() {
     if (!isLoggedIn()) {
         header("Location: ../login/login.php");
-        exit;
+        exit();
     }
 }
 
 /**
- * Enforce admin requirement:
- * Call this at the top of admin-only pages
+ * Redirect if already logged in
  */
-function requireAdmin()
-{
-    if (!isAdmin()) {
-        // Redirect non-admins to regular dashboard
-        header("Location: ..views/customer_view.php");
-        exit;
+function redirectIfLoggedIn() {
+    if (isLoggedIn()) {
+        if (isset($_SESSION['role']) && $_SESSION['role'] == 1) {
+            header("Location: ../admin/admin_dashboard.php");
+        } else {
+            header("Location: ../views/customer_view.php");
+        }
+        exit();
     }
+}
+
+/**
+ * Get current user ID
+ */
+function getUserId() {
+    return $_SESSION['user_id'] ?? null;
+}
+
+/**
+ * Get current user role
+ */
+function getUserRole() {
+    return $_SESSION['role'] ?? null;
+}
+
+/**
+ * Check if user is admin
+ */
+function isAdmin() {
+    return getUserRole() == 1;
+}
+
+/**
+ * Check if user is customer
+ */
+function isCustomer() {
+    return getUserRole() == 2; // Assuming 2 is customer role
 }
 ?>
