@@ -97,7 +97,7 @@ session_start();
     <div class="navbar">
         <?php if (!isset($_SESSION['customer_id'])): ?>
             <!-- Not logged in -->
-            <a href="register/register.php">Register</a>
+            <a href="login/register.php">Register</a>
             <a href="login/login.php">Login</a>
         <?php else: ?>
             <!-- Logged in users -->
