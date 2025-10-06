@@ -63,8 +63,7 @@ $(document).ready(function () {
                     });
                 }
             },
-            error: function (xhr, status, error) {
-                console.error('Login error:', error);
+            error: function () {
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
