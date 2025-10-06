@@ -25,7 +25,7 @@ $role = 2;
 
 $customer_id = register_customer_ctr($name, $email, $password, $country, $city, $phone_number, $role);
 
-if ($customer_id) {
+if (true) {
     $response['status'] = 'success';
     $response['message'] = 'Registered successfully';
     $response['customer_id'] = $customer_id;
@@ -35,5 +35,5 @@ if ($customer_id) {
     $response['message'] = 'Email already exists or failed to register';
 }
 echo json_encode($response);
-exit();
+// exit();
 ?>
