@@ -4,12 +4,12 @@ session_start();
 $response = array();
 
 // check if customer is already logged in
-// if (isset($_SESSION['customer_id'])) {
-//     $response['status'] = 'error';
-//     $response['message'] = 'You are already logged in';
-//     echo json_encode($response);
-//     exit();
-// }
+if (isset($_SESSION['customer_id'])) {
+    $response['status'] = 'error';
+    $response['message'] = 'You are already logged in';
+    echo json_encode($response);
+    exit();
+}
 
 require_once '../controllers/customer_controller.php';
 
