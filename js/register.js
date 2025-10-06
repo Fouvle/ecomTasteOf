@@ -1,6 +1,6 @@
 $(document).ready(function () {
-    $('#register-form').submit(async function (e) {
-        e.preventDefault();
+    $('#register-form').submit(function (e) {
+        e.preventDefault(); // Prevent the default form submission
 
         let name = $('#name').val();
         let email = $('#email').val();
@@ -29,47 +29,44 @@ $(document).ready(function () {
             return;
         }
 
-        try {
-            // Send data asynchronously using fetch API
-            const response = await fetch('../actions/register_customer_action.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: new URLSearchParams({
-                    customer_name: name,
-                    customer_email: email,
-                    customer_pass: password,
-                    customer_country: country,
-                    customer_city: city,
-                    customer_contact: phone_number,
-                }),
-            });
-
-            const result = await response.json();
-
-            if (result.status === 'success') {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success',
-                    text: result.message,
-                }).then(() => {
-                    // Redirect to login page after successful registration
-                    window.location.href = '../login/login.php';
-                });
-            } else {
+        // Send data asynchronously using jQuery AJAX
+        $.ajax({
+            url: '../actions/register_customer_action.php',
+            type: 'POST',
+            data: {
+                customer_name: name,
+                customer_email: email,
+                customer_pass: password,
+                customer_country: country,
+                customer_city: city,
+                customer_contact: phone_number,
+            },
+            dataType: 'json',
+            success: function (result) {
+                if (result.status === 'success') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: result.message,
+                    }).then(() => {
+                        // Redirect to login page after successful registration
+                        window.location.href = '../login/login.php';
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: result.message,
+                    });
+                }
+            },
+            error: function () {
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
-                    text: result.message,
+                    text: 'An error occurred! Please try again later.',
                 });
-            }
-        } catch (error) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'An error occurred! Please try again later.',
-            });
-        }
+            },
+        });
     });
 });
