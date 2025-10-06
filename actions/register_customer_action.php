@@ -19,12 +19,11 @@ $password = $_POST['customer_pass'];
 $country = $_POST['customer_country'];
 $city = $_POST['customer_city'];
 $phone_number = $_POST['customer_contact'];
-$role = $_POST['customer_role'];
 
 // Ensure role is either 0 (customer) or 1 (admin)
-$role = ($role == "admin") ? 1 : 0;
+$role = 2;
 
-$customer_id = register_customer_ctr($name, $email, $password, $phone_number, $role);
+$customer_id = register_customer_ctr($name, $email, $password, $country, $city, $phone_number, $role);
 
 if ($customer_id) {
     $response['status'] = 'success';
