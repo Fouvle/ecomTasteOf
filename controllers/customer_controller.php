@@ -2,7 +2,7 @@
 require_once '../classes/customer_class.php';
 
 // Login controller
-function login_customer_ctr($email, $password){
+function login_customer_ctr($email, $password) {
     $customer = new Customer();
     $user = $customer->getUserByEmail($email);
     if ($user && password_verify($password, $user['customer_pass'])) {
@@ -12,9 +12,8 @@ function login_customer_ctr($email, $password){
 }
 
 // Register controller
-function register_customer_ctr($name, $email, $password, $country, $city, $phone_number, $role){
+function register_customer_ctr($name, $email, $password, $country, $city, $phone_number, $role) {
     $customer = new Customer();
-    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-    return $customer->registerUser($name, $email, $password, $country, $city, $phone_number, $role);
+    $hashed_password = password_hash($password, PASSWORD_DEFAULT); // Hash the password
+    return $customer->registerUser($name, $email, $hashed_password, $country, $city, $phone_number, $role);
 }
-?>

@@ -53,15 +53,9 @@ $(document).ready(function () {
                     icon: 'success',
                     title: 'Success',
                     text: result.message,
-                }).then((res) => {
-                    if (res.isConfirmed) {
-                        // Redirect based on role
-                        if (result.role == 1) {
-                            window.location.href = '../admin/admin_dashboard.php';
-                        } else {
-                            window.location.href = '../login/login.php';
-                        }
-                    }
+                }).then(() => {
+                    // Redirect to login page after successful registration
+                    window.location.href = '../login/login.php';
                 });
             } else {
                 Swal.fire({
