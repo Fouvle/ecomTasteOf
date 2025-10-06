@@ -1,5 +1,5 @@
 <?php
-require_once '../Classes/customer_class.php';
+require_once '../classes/customer_class.php';
 
 // Login controller
 function login_customer_ctr($email, $password){
@@ -12,7 +12,7 @@ function login_customer_ctr($email, $password){
 }
 
 // Register controller
-function register_customer_ctr($name, $email, $password, $phone_number, $role){
+function register_customer_ctr($name, $email, $password, $country, $city, $phone_number, $role){
     $customer = new Customer();
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
     return $customer->registerUser($name, $email, $hashed_password, $phone_number, $role);

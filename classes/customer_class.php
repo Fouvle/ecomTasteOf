@@ -7,6 +7,8 @@ class Customer extends db_connection
     private $name;
     private $email;
     private $password;
+    private $country;
+    private $city;
     private $role;
     private $date_created;
     private $phone_number;
@@ -52,7 +54,7 @@ class Customer extends db_connection
     }
 
     // Register user
-    public function registerUser($name, $email, $password, $phone_number, $role)
+    public function registerUser($name, $email, $password, $country, $city, $phone_number, $role)
     {
         // check if email already exists
         $stmt = $this->db->prepare("SELECT customer_id FROM customer WHERE customer_email = ?");
@@ -66,8 +68,8 @@ class Customer extends db_connection
         // insert new customer
         $stmt = $this->db->prepare("INSERT INTO customer 
             (customer_name, customer_email, customer_pass, customer_contact, user_role, customer_country, customer_city) 
-            VALUES (?, ?, ?, ?, ?, '', '')");
-        $stmt->bind_param("ssssi", $name, $email, $password, $phone_number, $role);
+            VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("ssssssi", $name, $email, $password, $phone_number, $role, $country, $city);
 
         if ($stmt->execute()) {
             return $this->db->insert_id; // return new customer ID
