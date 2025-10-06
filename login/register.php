@@ -76,7 +76,7 @@
     <div class="card">
         <div class="card-header">Create Your TasteConnect Account</div>
         <div class="card-body">
-            <form method="POST" action="" id="register-form">
+            <form method="POST" id="register-form">
                 <div class="mb-3">
                     <label for="name" class="form-label">Full Name</label>
                     <input type="text" class="form-control" id="name" name="name" required>
