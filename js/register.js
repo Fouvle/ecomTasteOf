@@ -1,22 +1,26 @@
-$(document).ready(function() {
-    $('#register-form').submit(function(e) {
+$(document).ready(function () {
+    $('#register-form').submit(async function (e) {
         e.preventDefault();
 
         let name = $('#name').val();
         let email = $('#email').val();
         let password = $('#password').val();
-        let phone_number = $('#phone_number').val();
-        let role = $('input[name="role"]:checked').val();
+        let country = $('#country').val();
+        let city = $('#city').val();
+        let phone_number = $('#contact').val();
 
-        if (!name || !email || !password || !phone_number || !role) {
+        // Validate required fields
+        if (!name || !email || !password || !country || !city || !phone_number) {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
                 text: 'Please fill in all fields!',
             });
             return;
-        } 
-        else if (password.length < 6 || !password.match(/[a-z]/) || !password.match(/[A-Z]/) || !password.match(/[0-9]/)) {
+        }
+
+        // Validate password strength
+        if (password.length < 6 || !password.match(/[a-z]/) || !password.match(/[A-Z]/) || !password.match(/[0-9]/)) {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
@@ -25,49 +29,53 @@ $(document).ready(function() {
             return;
         }
 
-        $.ajax({
-            url: '../actions/register_customer_action.php',
-            type: 'POST',
-            dataType: 'json',
-            data: {
-                name: name,
-                email: email,
-                password: password,
-                phone_number: phone_number,
-                role: role
-            },
-            success: function(response) {
-                if (response.status === 'success') {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success',
-                        text: response.message,
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            if (response.role == 1) {
-                                // Redirect admin
-                                window.location.href = '../admin/admin_dashboard.php';
-                            } else {
-                                // Redirect customer
-                                window.location.href = '../login/login.php';
-                            }
+        try {
+            // Send data asynchronously using fetch API
+            const response = await fetch('../actions/register_customer_action.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({
+                    customer_name: name,
+                    customer_email: email,
+                    customer_pass: password,
+                    customer_country: country,
+                    customer_city: city,
+                    customer_contact: phone_number,
+                }),
+            });
+
+            const result = await response.json();
+
+            if (result.status === 'success') {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: result.message,
+                }).then((res) => {
+                    if (res.isConfirmed) {
+                        // Redirect based on role
+                        if (result.role == 1) {
+                            window.location.href = '../admin/admin_dashboard.php';
+                        } else {
+                            window.location.href = '../login/login.php';
                         }
-                    });
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: response.message,
-                    });
-                }
-            },
-            error: function() {
+                    }
+                });
+            } else {
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
-                    text: 'An error occurred! Please try again later.',
+                    text: result.message,
                 });
             }
-        });
+        } catch (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'An error occurred! Please try again later.',
+            });
+        }
     });
 });

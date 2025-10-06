@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>TasteConnect - Register</title>
@@ -22,7 +23,7 @@
             background: #fffaf0;
             border: 2px solid #c98c70;
             border-radius: 20px;
-            box-shadow: 0px 8px 18px rgba(0,0,0,0.15);
+            box-shadow: 0px 8px 18px rgba(0, 0, 0, 0.15);
             padding: 30px;
             width: 100%;
             max-width: 500px;
@@ -54,6 +55,7 @@
             font-size: 20px;
             transition: transform 0.2s;
         }
+
         .btn-custom:hover {
             transform: translateY(-2px);
             background: linear-gradient(135deg, #2a3e38, #a68b47);
@@ -63,11 +65,13 @@
             color: #35524a;
             font-weight: bold;
         }
+
         .highlight:hover {
             color: #a64b2a;
         }
     </style>
 </head>
+
 <body>
     <div class="card">
         <div class="card-header">Create Your TasteConnect Account</div>
@@ -75,27 +79,27 @@
             <form method="POST" action="../actions/register_customer_action.php" id="register-form">
                 <div class="mb-3">
                     <label for="name" class="form-label">Full Name</label>
-                    <input type="text" class="form-control" id="name" name="customer_name" required>
+                    <input type="text" class="form-control" id="name" name="name" required>
                 </div>
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="email" name="customer_email" required>
+                    <input type="email" class="form-control" id="email" name="email" required>
                 </div>
                 <div class="mb-3">
                     <label for="password" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="password" name="customer_pass" required>
+                    <input type="password" class="form-control" id="password" name="password" required>
                 </div>
                 <div class="mb-3">
                     <label for="country" class="form-label">Country</label>
-                    <input type="text" class="form-control" id="country" name="customer_country" required>
+                    <input type="text" class="form-control" id="country" name="country" required>
                 </div>
                 <div class="mb-3">
                     <label for="city" class="form-label">City</label>
-                    <input type="text" class="form-control" id="city" name="customer_city" required>
+                    <input type="text" class="form-control" id="city" name="city" required>
                 </div>
                 <div class="mb-3">
                     <label for="contact" class="form-label">Contact</label>
-                    <input type="text" class="form-control" id="contact" name="customer_contact" required>
+                    <input type="text" class="form-control" id="contact" name="phone_number" required>
                 </div>
                 <button type="submit" class="btn btn-custom w-100">Register</button>
             </form>
@@ -105,4 +109,5 @@
         </div>
     </div>
 </body>
+
 </html>
