@@ -104,4 +104,3 @@ class Customer extends db_connection
         return false;
     }
 }
-?>

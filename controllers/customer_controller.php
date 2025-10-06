@@ -15,6 +15,6 @@ function login_customer_ctr($email, $password){
 function register_customer_ctr($name, $email, $password, $country, $city, $phone_number, $role){
     $customer = new Customer();
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-    return $customer->registerUser($name, $email, $hashed_password, $phone_number, $role);
+    return $customer->registerUser($name, $email, $password, $country, $city, $phone_number, $role);
 }
 ?>
