@@ -107,7 +107,7 @@ session_start();
                     <?php if ($_SESSION['role'] === 'admin'): ?>
                         <a href="admin/category.php">Category Management</a>
                     <?php endif; ?>
-                    <form action="logout.php" method="POST">
+                    <form action="views/logout.php" method="POST">
                         <button type="submit">Logout</button>
                     </form>
                 </div>
