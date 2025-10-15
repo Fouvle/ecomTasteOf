@@ -57,7 +57,7 @@ if (isAdmin()) {
                 <span class="navbar-text welcome-message me-3">
                     Welcome, <?php echo htmlspecialchars($_SESSION['name'] ?? 'User'); ?>
                 </span>
-                <a href="../actions/logout_action.php" class="btn btn-outline-light btn-sm">Logout</a>
+                <a href="logout.php" class="btn btn-outline-light btn-sm">Logout</a>
             </div>
         </div>
     </nav>
