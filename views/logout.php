@@ -80,5 +80,8 @@ session_destroy();
         You'll be redirected to the login page shortly.</p>
         <div class="spinner"></div>
     </div>
+    <script>
+            window.location.href = '../login/login.php';
+    </script>
 </body>
 </html>
