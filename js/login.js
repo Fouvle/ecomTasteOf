@@ -39,6 +39,7 @@ $(document).ready(function () {
             dataType: 'json',
             data: { email: email, password: password },
             success: function (response) {
+                console.log(response);
                 if (response.status === 'success') {
                     Swal.fire({
                         icon: 'success',
