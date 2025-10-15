@@ -3,10 +3,10 @@ session_start();
 require_once "../settings/core.php";
 
 // Check if user is logged in
-if (!isLoggedIn()) {
-    header("Location: ../login/login.php");
-    exit();
-}
+// if (!isLoggedIn()) {
+//     header("Location: ../login/login.php");
+//     exit();
+// }
 
 // Redirect admin users to admin dashboard
 if (isAdmin()) {
