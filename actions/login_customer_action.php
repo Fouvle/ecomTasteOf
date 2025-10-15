@@ -4,6 +4,9 @@ session_start();
 ob_start();
 
 $response = array();
+$response['role'] = $_SESSION['role'];
+
+error_log('Role: ' . $_SESSION['role']); 
 
 /**
  * Utility function: check if user is logged in

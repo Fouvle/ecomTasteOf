@@ -28,7 +28,7 @@ if (!$name || !$email || !$password || !$country || !$city || !$phone_number) {
     exit();
 }
 
-// Ensure role is either 0 (customer) or 1 (admin)
+// Ensure role is either 2 (customer) or 1 (admin)
 $role = 2; // Default role for customers
 
 // Call the controller function
