@@ -1,169 +1,105 @@
 <?php
 session_start();
-require_once '../settings/db_class.php'; 
+require_once '../settings/core.php';
+require_once '../controllers/brand_controller.php';
+require_once '../controllers/category_controller.php';
 
-// Check if user is logged in
-if (!isset($_SESSION['customer_id'])) {
+// 1. Security Check: Redirect if not logged in or not admin
+redirectIfNotLoggedIn();
+if (!isAdmin()) {
     header('Location: ../login/login.php');
     exit();
 }
 
-// Check if user is admin
-if ($_SESSION['role'] !== 'admin') {
-    header('Location: ../login/login.php');
-    exit();
-}
-
-$user_id = $_SESSION['user_id'];
-
-// --- HANDLE CREATE ---
-$errors = [];
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_brand'])) {
-    $brand_name = trim($_POST['brand_name']);
-    $category_id = intval($_POST['category_id']);
-
-    // Check for empty fields
-    if ($brand_name === '' || !$category_id) {
-        $errors[] = "Brand name and category are required.";
-    } else {
-        // Check uniqueness
-        $stmt = $db->prepare("SELECT COUNT(*) FROM brands WHERE name = ? AND category_id = ? AND user_id = ?");
-        $stmt->execute([$brand_name, $category_id, $user_id]);
-        if ($stmt->fetchColumn() > 0) {
-            $errors[] = "This brand already exists in the selected category.";
-        }
-    }
-
-    // Insert if no errors
-    if (empty($errors)) {
-        $stmt = $db->prepare("INSERT INTO brands (name, category_id, user_id) VALUES (?, ?, ?)");
-        $stmt->execute([$brand_name, $category_id, $user_id]);
-        header('Location: brand.php');
-        exit;
-    }
-}
-
-// --- HANDLE UPDATE ---
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_brand'])) {
-    $brand_id = intval($_POST['brand_id']);
-    $brand_name = trim($_POST['brand_name']);
-
-    // Fetch current brand
-    $stmt = $db->prepare("SELECT * FROM brands WHERE id = ? AND user_id = ?");
-    $stmt->execute([$brand_id, $user_id]);
-    $brand = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if ($brand && $brand_name !== '') {
-        // Check uniqueness
-        $stmt = $db->prepare("SELECT COUNT(*) FROM brands WHERE name = ? AND category_id = ? AND user_id = ? AND id != ?");
-        $stmt->execute([$brand_name, $brand['category_id'], $user_id, $brand_id]);
-        if ($stmt->fetchColumn() == 0) {
-            $stmt = $db->prepare("UPDATE brands SET name = ? WHERE id = ? AND user_id = ?");
-            $stmt->execute([$brand_name, $brand_id, $user_id]);
-            header('Location: brand.php');
-            exit;
-        } else {
-            $errors[] = "This brand already exists in the selected category.";
-        }
-    } else {
-        $errors[] = "Invalid brand or name.";
-    }
-}
-
-// --- HANDLE DELETE ---
-if (isset($_GET['delete'])) {
-    $brand_id = intval($_GET['delete']);
-    $stmt = $db->prepare("DELETE FROM brands WHERE id = ? AND user_id = ?");
-    $stmt->execute([$brand_id, $user_id]);
-    header('Location: brand.php');
-    exit;
-}
-
-// --- FETCH CATEGORIES ---
-$stmt = $db->prepare("SELECT * FROM categories ORDER BY name ASC");
-$stmt->execute();
-$categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-// --- FETCH BRANDS GROUPED BY CATEGORY ---
-$stmt = $db->prepare("
-    SELECT b.*, c.name AS category_name
-    FROM brands b
-    JOIN categories c ON b.category_id = c.id
-    WHERE b.user_id = ?
-    ORDER BY c.name, b.name
-");
-$stmt->execute([$user_id]);
-$brands = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-// Organize brands by category
-$brands_by_category = [];
-foreach ($brands as $brand) {
-    $brands_by_category[$brand['category_name']][] = $brand;
-}
+// 2. RETRIEVE Categories for the "Add Brand" dropdown
+$categories = get_all_categories_ctr();
+// The brand list will be loaded dynamically via JS (fetch_brand_action.php)
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Manage Brands</title>
+    <title>Admin - Manage Brands</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        body { background-color: #f8f9fa; }
+        .card { border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .header-bg { background: linear-gradient(135deg, #35524a, #d1b97f); color: white; border-radius: 15px 15px 0 0; padding: 20px; }
+        .btn-custom { background-color: #35524a; border-color: #35524a; }
+        .btn-custom:hover { background-color: #55726a; border-color: #55726a; }
+        .brand-list-container { max-height: 60vh; overflow-y: auto; }
+    </style>
 </head>
-<body class="bg-light">
-<div class="container py-5">
-    <h2 class="mb-4">Brands Management</h2>
+<body>
+    <div class="container my-5">
+        <div class="card">
+            <div class="header-bg">
+                <h1 class="mb-0">Brand Management</h1>
+                <p class="text-white-50">Create, Update, and Delete product brands.</p>
+            </div>
+            <div class="card-body">
 
-    <?php if (!empty($errors)): ?>
-        <div class="alert alert-danger">
-            <?= implode('<br>', $errors) ?>
-        </div>
-    <?php endif; ?>
+                <h3 class="mb-3">Add New Brand</h3>
+                <form id="addBrandForm" class="row g-3 mb-5">
+                    <div class="col-md-5">
+                        <input type="text" name="brand_name" id="newBrandName" class="form-control" placeholder="Enter brand name" required>
+                    </div>
+                    <div class="col-md-5">
+                        <select name="cat_id" id="brandCategory" class="form-select" required>
+                            <option value="">Select Category...</option>
+                            <?php if ($categories): ?>
+                                <?php foreach ($categories as $cat): ?>
+                                    <option value="<?= $cat['cat_id'] ?>"><?= htmlspecialchars($cat['cat_name']) ?></option>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <option value="" disabled>No categories found. Add one first!</option>
+                            <?php endif; ?>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-custom w-100">Add Brand</button>
+                    </div>
+                </form>
 
-    <!-- CREATE FORM -->
-    <div class="card mb-4">
-        <div class="card-header">Add New Brand</div>
-        <div class="card-body">
-            <form method="post" class="row g-3">
-                <div class="col-md-6">
-                    <input type="text" name="brand_name" class="form-control" placeholder="Brand Name" required>
+                <h3 class="mb-4">Existing Brands (Organized by Category)</h3>
+                <div id="brandListContainer" class="brand-list-container p-3 border rounded">
+                    <p class="text-center text-muted">Loading brands...</p>
+                    <div id="brandAccordion" class="accordion">
+                        </div>
                 </div>
-                <div class="col-md-4">
-                    <select name="category_id" class="form-select" required>
-                        <option value="">Select Category</option>
-                        <?php foreach ($categories as $cat): ?>
-                            <option value="<?= $cat['id'] ?>"><?= htmlspecialchars($cat['name']) ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
-                <div class="col-md-2">
-                    <button type="submit" name="create_brand" class="btn btn-primary w-100">Add Brand</button>
-                </div>
-            </form>
+
+            </div>
         </div>
     </div>
-
-    <!-- BRANDS LIST -->
-    <?php foreach ($brands_by_category as $category_name => $brands): ?>
-        <div class="card mb-3">
-            <div class="card-header bg-secondary text-white">
-                <?= htmlspecialchars($category_name) ?>
-            </div>
-            <ul class="list-group list-group-flush">
-                <?php foreach ($brands as $brand): ?>
-                    <li class="list-group-item d-flex align-items-center justify-content-between">
-                        <!-- Inline edit form -->
-                        <form method="post" class="d-flex align-items-center gap-2" style="flex:1;">
-                            <input type="hidden" name="brand_id" value="<?= $brand['id'] ?>">
-                            <input type="text" name="brand_name" value="<?= htmlspecialchars($brand['name']) ?>" class="form-control form-control-sm" style="max-width:200px;" required>
-                            <button type="submit" name="update_brand" class="btn btn-outline-success btn-sm">Update</button>
-                        </form>
-                        <a href="?delete=<?= $brand['id'] ?>" class="btn btn-outline-danger btn-sm" onclick="return confirm('Delete this brand?')">Delete</a>
-                    </li>
-                <?php endforeach; ?>
-            </ul>
+    
+    <div class="modal fade" id="brandModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Edit Brand</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+              <form id="editBrandForm">
+                  <input type="hidden" id="brandId" name="brand_id">
+                  <div class="mb-3">
+                      <label for="brandName" class="form-label">Brand Name (Only Name is editable)</label>
+                      <input type="text" class="form-control" id="brandName" name="brand_name" required>
+                  </div>
+              </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-success" id="saveBrandBtn">Save Changes</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
         </div>
-    <?php endforeach; ?>
-
-</div>
+      </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/brand.js"></script>
 </body>
 </html>
