@@ -25,12 +25,13 @@ CREATE TABLE `customer` (
   PRIMARY KEY (`customer_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---------------------------------------------------------
--- Table structure for table 'brands'
+-- --------------------------------------------------------
+-- Table structure for table `brands` (MODIFIED)
 -- --------------------------------------------------------
 CREATE TABLE `brands` (
   `brand_id` INT(11) NOT NULL AUTO_INCREMENT,
   `brand_name` VARCHAR(100) NOT NULL,
+  `cat_id` INT(11) NOT NULL, -- ADDED: Links brand to a specific category
   PRIMARY KEY (`brand_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -115,6 +116,11 @@ CREATE TABLE `payment` (
 ALTER TABLE `categories` 
 ADD CONSTRAINT `categories_ibfk_1` 
 FOREIGN KEY (`created_by`) REFERENCES `customer` (`customer_id`) ON DELETE CASCADE;
+
+-- Add foreign key to brands table (NEW CONSTRAINT)
+ALTER TABLE `brands` 
+ADD CONSTRAINT `brands_ibfk_1` 
+FOREIGN KEY (`cat_id`) REFERENCES `categories` (`cat_id`) ON DELETE CASCADE;
 
 -- Add foreign keys to products table
 ALTER TABLE `products` 
