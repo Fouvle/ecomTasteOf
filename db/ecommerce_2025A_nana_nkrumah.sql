@@ -25,8 +25,8 @@ CREATE TABLE `customer` (
   PRIMARY KEY (`customer_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
--- Table structure for table `brands`
+--------------------------------------------------------
+-- Table structure for table 'brands'
 -- --------------------------------------------------------
 CREATE TABLE `brands` (
   `brand_id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -42,7 +42,10 @@ CREATE TABLE `categories` (
   `cat_name` VARCHAR(100) NOT NULL,
   `created_by` INT(11) NOT NULL,
   `is_approved` TINYINT(1) DEFAULT 0,
-  PRIMARY KEY (`cat_id`)
+  `cat_type` VARCHAR(50) DEFAULT 'V' NOT NULL, -- 'V' for Venue/Review Tag(Default), 'P' for Product/Experience Tag
+  `parent_cat_id` INT(11) DEFAULT NULL,
+  PRIMARY KEY (`cat_id`),
+  FOREIGN KEY (`parent_cat_id`) REFERENCES `categories` (`cat_id`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
