@@ -9,11 +9,11 @@ class Category extends db_connection {
     }
 
     // Add new category (default pending = 0)
-    public function addCategory($name, $userId) {
-        $name = $this->db_escape($name);
-        $userId = intval($userId);
-        $query = "INSERT INTO categories (cat_name, user_id, is_approved) 
-                  VALUES ('$name', $userId, 0)";
+    public function addCategory($user_id, $category_name) {
+        $category_name = $this->db_escape($category_name);
+        $user_id = (int)$user_id;
+
+        $query = "INSERT INTO categories (category_name, user_id) VALUES ('$category_name', $user_id)";
         return $this->db_write_query($query);
     }
 

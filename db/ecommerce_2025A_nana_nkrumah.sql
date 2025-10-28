@@ -45,6 +45,7 @@ CREATE TABLE `categories` (
   `is_approved` TINYINT(1) DEFAULT 0,
   `cat_type` VARCHAR(50) DEFAULT 'V' NOT NULL, -- 'V' for Venue/Review Tag(Default), 'P' for Product/Experience Tag
   `parent_cat_id` INT(11) DEFAULT NULL,
+  `user_id` INT(11) NOT NULL,
   PRIMARY KEY (`cat_id`),
   FOREIGN KEY (`parent_cat_id`) REFERENCES `categories` (`cat_id`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
