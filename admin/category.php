@@ -80,7 +80,7 @@ $categories = $stmt->get_result();
 </head>
 <body>
     <div class="container">
-        <h2>📂 Manage Categories</h2>
+        <h2>Manage Categories</h2>
         <?php if ($message) echo "<p class='message'>$message</p>"; ?>
 
         <!-- CREATE FORM -->
