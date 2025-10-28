@@ -9,40 +9,40 @@ class Category extends db_connection {
     }
 
     // Add new category (default pending = 0)
-    public function addCategory($user_id, $category_name) {
+    public function addCategory($cat_id, $category_name) {
         $category_name = $this->db_escape($category_name);
-        $user_id = (int)$user_id;
+        $cat_id = (int)$cat_id;
 
-        $query = "INSERT INTO categories (category_name, user_id) VALUES ('$category_name', $user_id)";
+        $query = "INSERT INTO categories (category_name, cat_id) VALUES ('$category_name', $cat_id)";
         return $this->db_write_query($query);
     }
 
     // Approve category
-    public function approveCategory($catId) {
-        $catId = intval($catId);
-        $query = "UPDATE categories SET is_approved = 1 WHERE cat_id = $catId";
+    public function approveCategory($cat_id) {
+        $cat_id = intval($cat_id);
+        $query = "UPDATE categories SET is_approved = 1 WHERE cat_id = $cat_id";
         return $this->db_write_query($query);
     }
 
     // Reject category
-    public function rejectCategory($catId) {
-        $catId = intval($catId);
-        $query = "UPDATE categories SET is_approved = 2 WHERE cat_id = $catId";
+    public function rejectCategory($cat_id) {
+        $catId = intval($cat_id);
+        $query = "UPDATE categories SET is_approved = 2 WHERE cat_id = $cat_id";
         return $this->db_write_query($query);
     }
 
     // Update category name (users can edit before approval or resubmit)
-    public function updateCategory($catId, $newName) {
-        $catId = intval($catId);
+    public function updateCategory($cat_id, $newName) {
+        $catId = intval($cat_id);
         $newName = $this->db_escape($newName);
-        $query = "UPDATE categories SET cat_name = '$newName', is_approved = 0 WHERE cat_id = $catId";
+        $query = "UPDATE categories SET cat_name = '$newName', is_approved = 0 WHERE cat_id = $cat_id";
         return $this->db_write_query($query);
     }
 
     // Delete category
-    public function deleteCategory($catId) {
-        $catId = intval($catId);
-        $query = "DELETE FROM categories WHERE cat_id = $catId";
+    public function deleteCategory($cat_id) {
+        $cat_id = intval($cat_id);
+        $query = "DELETE FROM categories WHERE cat_id = $cat_id";
         return $this->db_write_query($query);
     }
 
