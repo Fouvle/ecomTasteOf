@@ -3,16 +3,16 @@ session_start();
 require_once '../settings/db_class.php'; 
 
 // Check if user is logged in
-if (!isset($_SESSION['customer_id'])) {
-    header('Location: ../login/login.php');
-    exit();
-}
+// if (!isset($_SESSION['customer_id'])) {
+//     header('Location: ../login/login.php');
+//     exit();
+// }
 
-// Check if user is admin
-if ($_SESSION['role'] !== 'admin') {
-    header('Location: ../login/login.php');
-    exit();
-}
+// // Check if user is admin
+// if ($_SESSION['role'] !== 'admin') {
+//     header('Location: ../login/login.php');
+//     exit();
+// }
 
 $customer_id = $_SESSION['customer_id'];
 $message = "";

@@ -6,10 +6,10 @@ require_once '../controllers/category_controller.php';
 
 // 1. Security Check: Redirect if not logged in or not admin
 redirectIfNotLoggedIn();
-if (!isAdmin()) {
-    header('Location: ../login/login.php');
-    exit();
-}
+// if (!isAdmin()) {
+//     header('Location: ../login/login.php');
+//     exit();
+// }
 
 // 2. RETRIEVE Categories for the "Add Brand" dropdown
 $categories = get_all_categories_ctr();
