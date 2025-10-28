@@ -35,4 +35,28 @@ function getUserCategories($user_id) {
     return $category->getAllCategories();
 }
 
+//get all categories
+function get_all_categories_ctr() {
+    $category = new Category();
+    return $category->getAllCategories();
+}
+
+//get single category submitted by user
+function get_usercategory_ctr($user_id) {                
+    $category = new Category();
+    return $category->getUserCategories($user_id);
+}
+
+//update category
+function update_category_ctr($cat_id, $cat_name) {
+    $category = new Category();
+    return $category->updateCategory($cat_id, $cat_name);
+}   
+
+//delete category
+function delete_category_ctr($cat_id) {               
+    $category = new Category();
+    return $category->deleteCategory($cat_id);
+}
+
 ?>

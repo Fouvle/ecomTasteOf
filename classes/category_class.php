@@ -83,5 +83,7 @@ class Category extends db_connection {
         $query = "SELECT * FROM categories WHERE cat_id = $catId";
         return $this->db_fetch_one($query);
     }
+
+    
 }
 ?>
