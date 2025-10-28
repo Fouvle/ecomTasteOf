@@ -2,7 +2,7 @@
 session_start();
 require_once "../settings/core.php";
 require_once "../controllers/category_controller.php";
-require_once "../classes/category_class.php";
+require "../classes/category_class.php";
 
 // Ensure user is logged in
 if (!isLoggedIn()) {
