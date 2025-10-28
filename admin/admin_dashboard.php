@@ -6,10 +6,10 @@ require_once '../classes/category_class.php';
 require_once '../settings/core.php'; // Ensure core.php is loaded for isAdmin()
 
 // Ensure user is logged in and is an admin
-// if (!isLoggedIn() || !isAdmin()) {
-//     header('Location: ../login/login.php');
-//     exit();
-// }
+if (!(isLoggedIn() && isAdmin())) {
+    header('Location: ../login/login.php');
+    exit();
+}
 
 // Instantiate Category safely
 $category = new Category();
