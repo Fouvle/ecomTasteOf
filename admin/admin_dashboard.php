@@ -1,18 +1,17 @@
 <?php
+// error_reporting(E_ALL);
 ini_set('display_errors', 1);
 session_start();
 require_once '../classes/category_class.php';
-require_once '../settings/core.php'; // Ensure core.php is available for functions like isAdmin()
 
 // Ensure user is logged in and is an admin
-if (!isLoggedIn() || !isAdmin()) {
+if (!isset($_SESSION['customer_id']) || (int)$_SESSION['role'] !== 1) {
     header('Location: ../login/login.php');
     exit();
 }
 
 // Instantiate Category safely
 $category = new Category();
-// The database column for user ID in the categories table is 'created_by'
 $pendingCategories = $category->getPendingCategories() ?? [];
 $approvedCategories = $category->getApprovedCategories() ?? [];
 $rejectedCategories = $category->getRejectedCategories() ?? [];
@@ -21,48 +20,20 @@ $rejectedCategories = $category->getRejectedCategories() ?? [];
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Admin Dashboard - TasteConnect</title>
+    <title>Admin Dashboard - Category Management</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <style>
-        .nav-btn {
-            background-color: #3498db;
-            color: white;
-            transition: background-color 0.2s;
-            font-weight: bold;
-        }
-        .nav-btn:hover {
-            background-color: #2980b9;
-            color: white;
-        }
-    </style>
 </head>
 <body class="p-4 bg-light">
 
     <div class="container">
         <h1 class="mb-4 text-primary">Admin Dashboard</h1>
+        <h4 class="text-secondary mb-3">Category Management</h4>
 
-        <div class="row mb-5 g-3">
-            <div class="col-md-4">
-                <a href="category.php" class="btn nav-btn w-100 p-3">
-                    Manage Categories
-                </a>
-            </div>
-            <div class="col-md-4">
-                <a href="brand.php" class="btn nav-btn w-100 p-3">
-                    Manage Brands
-                </a>
-            </div>
-            <div class="col-md-4">
-                <a href="product.php" class="btn nav-btn w-100 p-3">
-                    Manage Products
-                </a>
-            </div>
-        </div>
-        <h4 class="text-secondary mb-3">Category Moderation Queue</h4>
-
+        <!-- Flash messages -->
         <div id="messageBox" class="alert d-none"></div>
 
+        <!-- Pending Categories -->
         <h5 class="mt-4">Pending Categories</h5>
         <ul class="list-group mb-4" id="pendingList">
             <?php if (empty($pendingCategories)): ?>
@@ -83,6 +54,7 @@ $rejectedCategories = $category->getRejectedCategories() ?? [];
             <?php endif; ?>
         </ul>
 
+        <!-- Approved Categories -->
         <h5>Approved Categories</h5>
         <ul class="list-group mb-4" id="approvedList">
             <?php if (empty($approvedCategories)): ?>
@@ -94,6 +66,7 @@ $rejectedCategories = $category->getRejectedCategories() ?? [];
             <?php endif; ?>
         </ul>
 
+        <!-- Rejected Categories -->
         <h5>Rejected Categories</h5>
         <ul class="list-group mb-4" id="rejectedList">
             <?php if (empty($rejectedCategories)): ?>
