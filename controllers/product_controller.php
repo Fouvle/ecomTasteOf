@@ -41,5 +41,5 @@ function get_all_products_ctr() {
  */
 function get_product_ctr($productId) {
     $product = new Product();
-    return $product->getProduct($productId);
+    return $product->getProductById($productId);
 }
