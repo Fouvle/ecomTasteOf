@@ -31,12 +31,12 @@ if (isset($_POST['create'])) {
             $stmt = $conn->prepare("INSERT INTO categories (cat_name, created_by) VALUES (?, ?)");
             $stmt->bind_param("si", $cat_name, $customer_id);
             $stmt->execute();
-            $message = "✅ Category created successfully.";
+            $message = "Category created successfully.";
         } else {
-            $message = "⚠️ Category name already exists.";
+            $message = "Category name already exists.";
         }
     } else {
-        $message = "⚠️ Category name cannot be empty.";
+        $message = "Category name cannot be empty.";
     }
 }
 
@@ -48,9 +48,9 @@ if (isset($_POST['update'])) {
         $stmt = $conn->prepare("UPDATE categories SET cat_name = ? WHERE cat_id = ? AND created_by = ?");
         $stmt->bind_param("sii", $cat_name, $cat_id, $customer_id);
         $stmt->execute();
-        $message = "✅ Category updated successfully.";
+        $message = "Category updated successfully.";
     } else {
-        $message = "⚠️ Category name cannot be empty.";
+        $message = "Category name cannot be empty.";
     }
 }
 
@@ -60,7 +60,7 @@ if (isset($_POST['delete'])) {
     $stmt = $conn->prepare("DELETE FROM categories WHERE cat_id = ? AND created_by = ?");
     $stmt->bind_param("ii", $cat_id, $customer_id);
     $stmt->execute();
-    $message = "🗑️ Category deleted successfully.";
+    $message = "Category deleted successfully.";
 }
 
 // RETRIEVE
