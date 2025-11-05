@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Update the brand using the controller
-    $result = update_brand_ctr($cat_id, $brand_name);
+    $result -> update_brand_ctr($cat_id, $brand_name);
     if ($result === true) {
         echo json_encode(['status' => 'success', 'message' => 'Brand updated successfully.']);
     } else {
