@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
 
-    $result = deleteCategory($user_id, $category_id);
+    $result -> deleteCategory($user_id, $category_id);
 
     if ($result === true) {
         echo json_encode([
