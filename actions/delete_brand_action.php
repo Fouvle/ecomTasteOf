@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Delete the brand using the controller
-    $result = delete_brand_ctr($brand_id);
+    $result -> delete_brand_ctr($brand_id);
     if ($result === true) {
         echo json_encode(['status' => 'success', 'message' => 'Brand deleted successfully.']);
     } else {

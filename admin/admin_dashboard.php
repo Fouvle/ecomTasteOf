@@ -2,8 +2,8 @@
 // error_reporting(E_ALL);
 ini_set('display_errors', 1);
 session_start();
-require_once '../classes/category_class.php';
-require_once '../settings/core.php'; // Ensure core.php is loaded for isAdmin()
+require_once PROJECT_ROOT . '../classes/category_class.php';
+require_once  PROJECT_ROOT . '../settings/core.php'; // Ensure core.php is loaded for isAdmin()
 
 // Ensure user is logged in and is an admin
 // if (!(isLoggedIn() && isAdmin())) {

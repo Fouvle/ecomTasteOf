@@ -1,8 +1,8 @@
 <?php
 session_start();
-require_once "../settings/core.php";
-require_once "../controllers/category_controller.php";
-require "../classes/category_class.php";
+require_once __DIR__ . "/../settings/core.php";
+require_once __DIR__ . "/../controllers/category_controller.php";
+require_once  "../classes/category_class.php";
 
 // Ensure user is logged in
 if (!isLoggedIn()) {
@@ -12,8 +12,12 @@ if (!isLoggedIn()) {
 
 // Handle add category
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // $cat_id = "";
     $category_name = trim($_POST['category_name']);
     $user_id = $_SESSION['id']; // Retrieve user ID from the session
+
+    $catId = intval($_POST['cat_id']);
+
 
     if (empty($category_name)) {
         echo json_encode([
@@ -24,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Call the addCategory function
-    $result = addCategory($user_id, $category_name);
+    $result -> addCategory($catId, $category_name);
 
     if ($result === true) {
         echo json_encode([
