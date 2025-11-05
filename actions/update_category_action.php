@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
 
-    $result = updateCategory($user_id, $category_id, $new_name);
+    $result -> updateCategory($user_id, $category_id, $new_name);
 
     if ($result === true) {
         echo json_encode([
