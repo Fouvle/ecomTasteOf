@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Attempt to update product data (image is handled separately if submitted)
-    $result = update_product_ctr($productId, $catId, $brandId, $title, $price, $desc, $keywords);
+    $result -> update_product_ctr($productId, $catId, $brandId, $title, $price, $desc, $keywords);
 
     if ($result) {
         echo json_encode([
