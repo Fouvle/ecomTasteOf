@@ -13,8 +13,8 @@ require_once '../controllers/category_controller.php';
 // }
 
 // Fetch categories and brands for the dropdowns
-$categories = get_all_categories_ctr();
-$brands = get_all_brands_ctr();
+$categories -> get_all_categories_ctr();
+$brands -> get_all_brands_ctr();
 ?>
 
 <!DOCTYPE html>
