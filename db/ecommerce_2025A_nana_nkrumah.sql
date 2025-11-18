@@ -1,17 +1,12 @@
--- phpMyAdmin SQL Dump
--- version 5.1.1
--- https://www.phpmyadmin.net/
---
-
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
 
 USE `ecommerce_2025A_nana_nkrumah`;
 
--- --------------------------------------------------------
--- Table structure for table `customer`
--- --------------------------------------------------------
+---------------------------------------------------------
+-- 1. CUSTOMER TABLE (unchanged)
+---------------------------------------------------------
 CREATE TABLE `customer` (
   `customer_id` INT(11) NOT NULL AUTO_INCREMENT,
   `customer_name` VARCHAR(100) NOT NULL,
@@ -21,40 +16,57 @@ CREATE TABLE `customer` (
   `customer_city` VARCHAR(30) NOT NULL,
   `customer_contact` VARCHAR(15) NOT NULL,
   `customer_image` VARCHAR(100) DEFAULT NULL,
-  `user_role` INT(11) NOT NULL,
+  `user_role` ENUM('customer','vendor') NOT NULL DEFAULT 'customer',
   PRIMARY KEY (`customer_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
--- Table structure for table `brands` (MODIFIED)
--- --------------------------------------------------------
-CREATE TABLE `brands` (
-  `brand_id` INT(11) NOT NULL AUTO_INCREMENT,
-  `brand_name` VARCHAR(100) NOT NULL,
-  `cat_id` INT(11) NOT NULL, -- ADDED: Links brand to a specific category
-  PRIMARY KEY (`brand_id`)
+
+---------------------------------------------------------
+-- 2. VENDORS TABLE (NEW)
+---------------------------------------------------------
+CREATE TABLE `vendors` (
+  `vendor_id` INT(11) NOT NULL AUTO_INCREMENT,
+  `customer_id` INT(11) NOT NULL,
+  `business_name` VARCHAR(150) NOT NULL,
+  `business_address` VARCHAR(255),
+  `business_description` TEXT,
+  `verified` TINYINT(1) DEFAULT 0,
+  PRIMARY KEY (`vendor_id`),
+  FOREIGN KEY (`customer_id`) REFERENCES `customer`(`customer_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
--- Table structure for table `categories`
--- --------------------------------------------------------
+
+---------------------------------------------------------
+-- 3. CATEGORIES TABLE (same structure)
+---------------------------------------------------------
 CREATE TABLE `categories` (
   `cat_id` INT(11) NOT NULL AUTO_INCREMENT,
   `cat_name` VARCHAR(100) NOT NULL,
+  `cat_type` ENUM('food','booking','event') DEFAULT 'food', 
   `created_by` INT(11) NOT NULL,
-  `is_approved` TINYINT(1) DEFAULT 0,
-  `cat_type` VARCHAR(50) DEFAULT 'V' NOT NULL, -- 'V' for Venue/Review Tag(Default), 'P' for Product/Experience Tag
-  `parent_cat_id` INT(11) DEFAULT NULL,
-  `user_id` INT(11) NOT NULL,
   PRIMARY KEY (`cat_id`),
-  FOREIGN KEY (`parent_cat_id`) REFERENCES `categories` (`cat_id`) ON DELETE SET NULL
+  FOREIGN KEY (`created_by`) REFERENCES `customer` (`customer_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
--- Table structure for table `products`
--- --------------------------------------------------------
+
+---------------------------------------------------------
+-- 4. BRANDS TABLE (unchanged but linked to categories)
+---------------------------------------------------------
+CREATE TABLE `brands` (
+  `brand_id` INT(11) NOT NULL AUTO_INCREMENT,
+  `brand_name` VARCHAR(100) NOT NULL,
+  `cat_id` INT(11) NOT NULL,
+  PRIMARY KEY (`brand_id`),
+  FOREIGN KEY (`cat_id`) REFERENCES `categories` (`cat_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+---------------------------------------------------------
+-- 5. PRODUCTS TABLE (menu items)
+---------------------------------------------------------
 CREATE TABLE `products` (
   `product_id` INT(11) NOT NULL AUTO_INCREMENT,
+  `vendor_id` INT(11) NOT NULL,
   `product_cat` INT(11) NOT NULL,
   `product_brand` INT(11) NOT NULL,
   `product_title` VARCHAR(200) NOT NULL,
@@ -62,106 +74,110 @@ CREATE TABLE `products` (
   `product_desc` VARCHAR(500) DEFAULT NULL,
   `product_image` VARCHAR(100) DEFAULT NULL,
   `product_keywords` VARCHAR(100) DEFAULT NULL,
-  PRIMARY KEY (`product_id`)
+  PRIMARY KEY (`product_id`),
+  FOREIGN KEY (`vendor_id`) REFERENCES `vendors`(`vendor_id`) ON DELETE CASCADE,
+  FOREIGN KEY (`product_cat`) REFERENCES `categories`(`cat_id`),
+  FOREIGN KEY (`product_brand`) REFERENCES `brands`(`brand_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
--- Table structure for table `orders`
--- --------------------------------------------------------
+
+---------------------------------------------------------
+-- 6. BOOKINGS TABLE (NEW)
+---------------------------------------------------------
+CREATE TABLE `bookings` (
+  `booking_id` INT(11) NOT NULL AUTO_INCREMENT,
+  `customer_id` INT(11) NOT NULL,
+  `vendor_id` INT(11) NOT NULL,
+  `booking_datetime` DATETIME NOT NULL,
+  `number_of_people` INT(11) NOT NULL,
+  `booking_status` ENUM('pending','confirmed','cancelled','completed') DEFAULT 'pending',
+  PRIMARY KEY (`booking_id`),
+  FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`),
+  FOREIGN KEY (`vendor_id`) REFERENCES `vendors` (`vendor_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+---------------------------------------------------------
+-- 7. EVENTS TABLE (food tours, classes, etc.)
+---------------------------------------------------------
+CREATE TABLE `events` (
+  `event_id` INT(11) NOT NULL AUTO_INCREMENT,
+  `vendor_id` INT(11) NOT NULL,
+  `event_title` VARCHAR(200) NOT NULL,
+  `event_description` TEXT,
+  `event_date` DATETIME NOT NULL,
+  `price` DOUBLE NOT NULL,
+  `max_participants` INT(11) DEFAULT NULL,
+  PRIMARY KEY (`event_id`),
+  FOREIGN KEY (`vendor_id`) REFERENCES `vendors`(`vendor_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+---------------------------------------------------------
+-- 8. REVIEWS TABLE (NEW)
+---------------------------------------------------------
+CREATE TABLE `reviews` (
+  `review_id` INT(11) NOT NULL AUTO_INCREMENT,
+  `customer_id` INT(11) NOT NULL,
+  `vendor_id` INT(11) NOT NULL,
+  `product_id` INT(11) DEFAULT NULL,
+  `rating` INT(1) NOT NULL CHECK (rating BETWEEN 1 AND 5),
+  `review_text` TEXT,
+  `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`review_id`),
+  FOREIGN KEY (`customer_id`) REFERENCES `customer`(`customer_id`),
+  FOREIGN KEY (`vendor_id`) REFERENCES `vendors`(`vendor_id`),
+  FOREIGN KEY (`product_id`) REFERENCES `products`(`product_id`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+---------------------------------------------------------
+-- 9. FAVORITES TABLE (NEW)
+---------------------------------------------------------
+CREATE TABLE `favorites` (
+  `fav_id` INT(11) NOT NULL AUTO_INCREMENT,
+  `customer_id` INT(11) NOT NULL,
+  `vendor_id` INT(11) DEFAULT NULL,
+  `product_id` INT(11) DEFAULT NULL,
+  PRIMARY KEY (`fav_id`),
+  FOREIGN KEY (`customer_id`) REFERENCES `customer`(`customer_id`),
+  FOREIGN KEY (`vendor_id`) REFERENCES `vendors`(`vendor_id`),
+  FOREIGN KEY (`product_id`) REFERENCES `products`(`product_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+---------------------------------------------------------
+-- 10. ORDERS TABLE (used for event payments)
+---------------------------------------------------------
 CREATE TABLE `orders` (
   `order_id` INT(11) NOT NULL AUTO_INCREMENT,
   `customer_id` INT(11) NOT NULL,
-  `invoice_no` INT(11) NOT NULL,
+  `event_id` INT(11) DEFAULT NULL,
+  `booking_id` INT(11) DEFAULT NULL,
+  `invoice_no` VARCHAR(50) NOT NULL,
   `order_date` DATE NOT NULL,
   `order_status` VARCHAR(100) NOT NULL,
-  PRIMARY KEY (`order_id`)
+  PRIMARY KEY (`order_id`),
+  FOREIGN KEY (`customer_id`) REFERENCES `customer`(`customer_id`),
+  FOREIGN KEY (`event_id`) REFERENCES `events`(`event_id`) ON DELETE SET NULL,
+  FOREIGN KEY (`booking_id`) REFERENCES `bookings`(`booking_id`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
--- Table structure for table `cart`
--- --------------------------------------------------------
-CREATE TABLE `cart` (
-  `p_id` INT(11) NOT NULL,
-  `ip_add` VARCHAR(50) NOT NULL,
-  `c_id` INT(11) DEFAULT NULL,
-  `qty` INT(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
--- Table structure for table `orderdetails`
--- --------------------------------------------------------
-CREATE TABLE `orderdetails` (
-  `order_id` INT(11) NOT NULL,
-  `product_id` INT(11) NOT NULL,
-  `qty` INT(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
--- Table structure for table `payment`
--- --------------------------------------------------------
+---------------------------------------------------------
+-- 11. PAYMENTS TABLE (supports MoMo/Card)
+---------------------------------------------------------
 CREATE TABLE `payment` (
   `pay_id` INT(11) NOT NULL AUTO_INCREMENT,
-  `amt` DOUBLE NOT NULL,
-  `customer_id` INT(11) NOT NULL,
   `order_id` INT(11) NOT NULL,
-  `currency` TEXT NOT NULL,
-  `payment_date` DATE NOT NULL,
-  PRIMARY KEY (`pay_id`)
+  `customer_id` INT(11) NOT NULL,
+  `amt` DOUBLE NOT NULL,
+  `payment_method` ENUM('mtn_momo','telecel_cash','at_money','card') NOT NULL,
+  `currency` VARCHAR(10) NOT NULL DEFAULT 'GHS',
+  `payment_date` DATETIME NOT NULL,
+  PRIMARY KEY (`pay_id`),
+  FOREIGN KEY (`order_id`) REFERENCES `orders`(`order_id`),
+  FOREIGN KEY (`customer_id`) REFERENCES `customer`(`customer_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
--- Now add the foreign key constraints
--- --------------------------------------------------------
-
--- Add foreign key to categories table
-ALTER TABLE `categories` 
-ADD CONSTRAINT `categories_ibfk_1` 
-FOREIGN KEY (`created_by`) REFERENCES `customer` (`customer_id`) ON DELETE CASCADE;
-
--- Add foreign key to brands table (NEW CONSTRAINT)
-ALTER TABLE `brands` 
-ADD CONSTRAINT `brands_ibfk_1` 
-FOREIGN KEY (`cat_id`) REFERENCES `categories` (`cat_id`) ON DELETE CASCADE;
-
--- Add foreign keys to products table
-ALTER TABLE `products` 
-ADD CONSTRAINT `products_ibfk_1` 
-FOREIGN KEY (`product_cat`) REFERENCES `categories` (`cat_id`);
-
-ALTER TABLE `products` 
-ADD CONSTRAINT `products_ibfk_2` 
-FOREIGN KEY (`product_brand`) REFERENCES `brands` (`brand_id`);
-
--- Add foreign keys to cart table
-ALTER TABLE `cart` 
-ADD CONSTRAINT `cart_ibfk_1` 
-FOREIGN KEY (`p_id`) REFERENCES `products` (`product_id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
-ALTER TABLE `cart` 
-ADD CONSTRAINT `cart_ibfk_2` 
-FOREIGN KEY (`c_id`) REFERENCES `customer` (`customer_id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
--- Add foreign key to orders table
-ALTER TABLE `orders` 
-ADD CONSTRAINT `orders_ibfk_1` 
-FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`);
-
--- Add foreign keys to orderdetails table
-ALTER TABLE `orderdetails` 
-ADD CONSTRAINT `orderdetails_ibfk_1` 
-FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`);
-
-ALTER TABLE `orderdetails` 
-ADD CONSTRAINT `orderdetails_ibfk_2` 
-FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`);
-
--- Add foreign keys to payment table
-ALTER TABLE `payment` 
-ADD CONSTRAINT `payment_ibfk_1` 
-FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`);
-
-ALTER TABLE `payment` 
-ADD CONSTRAINT `payment_ibfk_2` 
-FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`);
 
 COMMIT;
