@@ -1,6 +1,5 @@
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
-SET time_zone = "+00:00";
 
 USE ecommerce_2025A_nana_nkrumah;
 
@@ -16,13 +15,9 @@ CREATE TABLE customer (
   customer_city VARCHAR(30) NOT NULL,
   customer_contact VARCHAR(15) NOT NULL,
   customer_image VARCHAR(100),
-  user_role ENUM('customer','vendor','admin') NOT NULL DEFAULT 'customer',
   PRIMARY KEY (customer_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- =========================================================
--- 2. VENDORS TABLE (BUSINESS PROFILES)
--- =========================================================
 CREATE TABLE vendors (
   vendor_id INT(11) NOT NULL AUTO_INCREMENT,
   customer_id INT(11) NOT NULL UNIQUE,
@@ -30,50 +25,29 @@ CREATE TABLE vendors (
   business_address VARCHAR(255),
   business_description TEXT,
   verified TINYINT(1) DEFAULT 0,
+  admin_privilege TINYINT(1) NOT NULL DEFAULT 1,
   PRIMARY KEY (vendor_id),
-  FOREIGN KEY (customer_id) REFERENCES customer(customer_id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- =========================================================
--- 3.TRIGGER: ENFORCE CUSTOMER → VENDOR/ADMIN BEFORE CREATING VENDOR PROFILE
--- =========================================================
-DELIMITER $$
-
-CREATE TRIGGER check_vendor_role
-BEFORE INSERT ON vendors
-FOR EACH ROW
-BEGIN
-    DECLARE role_value VARCHAR(20);
-
-    SELECT user_role INTO role_value
-    FROM customer
-    WHERE customer_id = NEW.customer_id;
-
-    IF role_value NOT IN ('vendor','admin') THEN
-        SET NEW.business_name = NULL;
-    END IF;
-END$$
-
-DELIMITER ;
 
 
 -- =========================================================
--- 4. CATEGORIES TABLE
+-- 3. CATEGORIES TABLE
 -- =========================================================
 CREATE TABLE categories (
   cat_id INT(11) NOT NULL AUTO_INCREMENT,
   cat_name VARCHAR(100) NOT NULL,
   cat_type ENUM('Food Service','Booking') NOT NULL DEFAULT 'Food Service',
   created_by INT(11) NOT NULL,
-  parent_cat_id INT(11) DEFAULT NULL,
-  is_approved TINYINT(1) DEFAULT 0,
+  parent_cat_id INT(11),
   PRIMARY KEY (cat_id),
-  FOREIGN KEY (created_by) REFERENCES customer(customer_id) ON DELETE CASCADE,
+  FOREIGN KEY (created_by) REFERENCES customer(customer_id),
   FOREIGN KEY (parent_cat_id) REFERENCES categories(cat_id) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+
 -- =========================================================
--- 5. BRANDS TABLE
+-- 4. BRANDS TABLE
 -- =========================================================
 CREATE TABLE brands (
   brand_id INT(11) NOT NULL AUTO_INCREMENT,
