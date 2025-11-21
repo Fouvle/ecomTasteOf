@@ -87,14 +87,13 @@ session_start();
         </div>
       </div>
       <div class="hero-image">
-        <!-- Placeholder Image -->
         <img src="https://images.unsplash.com/photo-1543364195-077a16c30ff3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Ghanaian Food">
       </div>
     </div>
   </section>
 
   <!-- Featured Vendors Section -->
-  <div class="section-container">
+  <section class="section-container">
     <div class="grid-header">
         <div>
             <h2>Featured Vendors</h2>
@@ -163,7 +162,64 @@ session_start();
             </div>
         </div>
     </div>
-  </div>
+  </section>
+
+  <!-- Testimonials Section (New) -->
+  <section class="section-container" style="margin-bottom: 4rem;">
+      <h2 style="text-align: center; font-size: 2.5rem; margin-bottom: 3rem;">What Our Users Say</h2>
+      
+      <div class="grid-container">
+          <!-- Testimonial 1 -->
+          <div class="testimonial-card">
+              <div class="stars">★★★★★</div>
+              <p class="testimonial-text">"TasteConnect helped me discover amazing local vendors I never knew existed!"</p>
+              <div class="testimonial-user">
+                  <strong>Akosua M.</strong>
+                  <span>Accra</span>
+              </div>
+          </div>
+
+          <!-- Testimonial 2 -->
+          <div class="testimonial-card">
+              <div class="stars">★★★★★</div>
+              <p class="testimonial-text">"Booking is so easy and the food is always authentic. Love this platform!"</p>
+              <div class="testimonial-user">
+                  <strong>Yaw O.</strong>
+                  <span>Kumasi</span>
+              </div>
+          </div>
+
+          <!-- Testimonial 3 -->
+          <div class="testimonial-card">
+              <div class="stars">★★★★★</div>
+              <p class="testimonial-text">"Finally, a platform that celebrates our Ghanaian culinary heritage!"</p>
+              <div class="testimonial-user">
+                  <strong>Abena S.</strong>
+                  <span>Takoradi</span>
+              </div>
+          </div>
+      </div>
+  </section>
+
+  <!-- Culinary Stories Section (New) -->
+  <section class="section-container" style="margin-bottom: 4rem;">
+      <div class="grid-header" style="justify-content: flex-start; gap: 1rem;">
+          <i class="fas fa-chart-line" style="color: var(--primary-orange); font-size: 1.5rem;"></i> 
+          <h2 style="margin: 0;">Culinary Stories</h2>
+      </div>
+
+      <div class="grid-container">
+          <div class="story-card">
+              <img src="https://images.unsplash.com/photo-1512058564366-18510be2db19?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Story 1">
+          </div>
+          <div class="story-card">
+              <img src="https://images.unsplash.com/photo-1543362906-acfc16c67564?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Story 2">
+          </div>
+          <div class="story-card">
+              <img src="https://images.unsplash.com/photo-1604382355076-af4b0eb60143?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Story 3">
+          </div>
+      </div>
+  </section>
 
 </body>
 </html>
