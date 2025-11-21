@@ -18,6 +18,9 @@ CREATE TABLE customer (
   PRIMARY KEY (customer_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+-- =========================================================
+-- 2. VENDORS TABLE
+-- =========================================================
 CREATE TABLE vendors (
   vendor_id INT(11) NOT NULL AUTO_INCREMENT,
   customer_id INT(11) NOT NULL UNIQUE,
@@ -27,8 +30,8 @@ CREATE TABLE vendors (
   verified TINYINT(1) DEFAULT 0,
   admin_privilege TINYINT(1) NOT NULL DEFAULT 1,
   PRIMARY KEY (vendor_id),
+  FOREIGN KEY (customer_id) REFERENCES customer(customer_id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
 
 
 -- =========================================================
@@ -58,7 +61,7 @@ CREATE TABLE brands (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- =========================================================
--- 6. PRODUCTS TABLE (Menu Items, Events, Booking Slots)
+-- 5. PRODUCTS TABLE (Menu Items, Events, Booking Slots)
 -- =========================================================
 CREATE TABLE products (
   product_id INT(11) NOT NULL AUTO_INCREMENT,
@@ -77,7 +80,7 @@ CREATE TABLE products (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- =========================================================
--- 7. BOOKINGS TABLE
+-- 6. BOOKINGS TABLE
 -- =========================================================
 CREATE TABLE bookings (
   booking_id INT(11) NOT NULL AUTO_INCREMENT,
@@ -92,7 +95,7 @@ CREATE TABLE bookings (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- =========================================================
--- 8. EVENTS TABLE
+-- 7. EVENTS TABLE
 -- =========================================================
 CREATE TABLE events (
   event_id INT(11) NOT NULL AUTO_INCREMENT,
@@ -107,7 +110,7 @@ CREATE TABLE events (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- =========================================================
--- 9. REVIEWS TABLE
+-- 8. REVIEWS TABLE
 -- =========================================================
 CREATE TABLE reviews (
   review_id INT(11) NOT NULL AUTO_INCREMENT,
@@ -124,7 +127,7 @@ CREATE TABLE reviews (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- =========================================================
--- 10. FAVORITES TABLE
+-- 9. FAVORITES TABLE
 -- =========================================================
 CREATE TABLE favorites (
   fav_id INT(11) NOT NULL AUTO_INCREMENT,
@@ -138,7 +141,7 @@ CREATE TABLE favorites (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- =========================================================
--- 11. ORDERS TABLE (Events & Bookings Payments)
+-- 10. ORDERS TABLE (Events & Bookings Payments)
 -- =========================================================
 CREATE TABLE orders (
   order_id INT(11) NOT NULL AUTO_INCREMENT,
@@ -155,7 +158,7 @@ CREATE TABLE orders (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- =========================================================
--- 12. PAYMENTS TABLE
+-- 11. PAYMENTS TABLE
 -- =========================================================
 CREATE TABLE payment (
   pay_id INT(11) NOT NULL AUTO_INCREMENT,
