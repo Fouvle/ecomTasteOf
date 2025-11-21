@@ -81,7 +81,7 @@ session_start();
         <?php endif; ?>
         
         <div style="display:flex; gap:1rem;">
-          <a href="all_product.php" class="btn btn-outline" style="color:var(--primary-orange); border:none; font-weight:bold; background:white; padding: 0.8rem 1.5rem;">
+          <a href="views/all_product.php" class="btn btn-outline" style="color:var(--primary-orange); border:none; font-weight:bold; background:white; padding: 0.8rem 1.5rem;">
             Explore Now <i class="fas fa-arrow-right"></i>
           </a>
         </div>
