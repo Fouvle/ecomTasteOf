@@ -4,9 +4,10 @@ SET time_zone = "+00:00";
 
 USE `ecommerce_2025A_nana_nkrumah`;
 
----------------------------------------------------------
--- 1. CUSTOMER TABLE (unchanged)
----------------------------------------------------------
+/*
+--1. CUSTOMER TABLE
+*/
+
 CREATE TABLE `customer` (
   `customer_id` INT(11) NOT NULL AUTO_INCREMENT,
   `customer_name` VARCHAR(100) NOT NULL,
@@ -21,9 +22,7 @@ CREATE TABLE `customer` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
----------------------------------------------------------
--- 2. VENDORS TABLE (NEW)
----------------------------------------------------------
+-- 2. VENDORS TABLE
 CREATE TABLE `vendors` (
   `vendor_id` INT(11) NOT NULL AUTO_INCREMENT,
   `customer_id` INT(11) NOT NULL,
@@ -36,9 +35,8 @@ CREATE TABLE `vendors` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
----------------------------------------------------------
--- 3. CATEGORIES TABLE (same structure)
----------------------------------------------------------
+-- 3. CATEGORIES TABLE
+
 CREATE TABLE `categories` (
   `cat_id` INT(11) NOT NULL AUTO_INCREMENT,
   `cat_name` VARCHAR(100) NOT NULL,
@@ -49,9 +47,7 @@ CREATE TABLE `categories` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
----------------------------------------------------------
--- 4. BRANDS TABLE (unchanged but linked to categories)
----------------------------------------------------------
+-- 4. BRANDS TABLE (linked to categories)
 CREATE TABLE `brands` (
   `brand_id` INT(11) NOT NULL AUTO_INCREMENT,
   `brand_name` VARCHAR(100) NOT NULL,
@@ -61,9 +57,7 @@ CREATE TABLE `brands` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
----------------------------------------------------------
 -- 5. PRODUCTS TABLE (menu items)
----------------------------------------------------------
 CREATE TABLE `products` (
   `product_id` INT(11) NOT NULL AUTO_INCREMENT,
   `vendor_id` INT(11) NOT NULL,
@@ -81,9 +75,8 @@ CREATE TABLE `products` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
----------------------------------------------------------
--- 6. BOOKINGS TABLE (NEW)
----------------------------------------------------------
+
+-- 6. BOOKINGS TABLE 
 CREATE TABLE `bookings` (
   `booking_id` INT(11) NOT NULL AUTO_INCREMENT,
   `customer_id` INT(11) NOT NULL,
@@ -97,9 +90,8 @@ CREATE TABLE `bookings` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
----------------------------------------------------------
+
 -- 7. EVENTS TABLE (food tours, classes, etc.)
----------------------------------------------------------
 CREATE TABLE `events` (
   `event_id` INT(11) NOT NULL AUTO_INCREMENT,
   `vendor_id` INT(11) NOT NULL,
@@ -113,9 +105,8 @@ CREATE TABLE `events` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
----------------------------------------------------------
+
 -- 8. REVIEWS TABLE (NEW)
----------------------------------------------------------
 CREATE TABLE `reviews` (
   `review_id` INT(11) NOT NULL AUTO_INCREMENT,
   `customer_id` INT(11) NOT NULL,
@@ -131,9 +122,7 @@ CREATE TABLE `reviews` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
----------------------------------------------------------
--- 9. FAVORITES TABLE (NEW)
----------------------------------------------------------
+-- 9. FAVORITES TABLE 
 CREATE TABLE `favorites` (
   `fav_id` INT(11) NOT NULL AUTO_INCREMENT,
   `customer_id` INT(11) NOT NULL,
@@ -146,9 +135,8 @@ CREATE TABLE `favorites` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
----------------------------------------------------------
+
 -- 10. ORDERS TABLE (used for event payments)
----------------------------------------------------------
 CREATE TABLE `orders` (
   `order_id` INT(11) NOT NULL AUTO_INCREMENT,
   `customer_id` INT(11) NOT NULL,
@@ -164,9 +152,8 @@ CREATE TABLE `orders` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
----------------------------------------------------------
+
 -- 11. PAYMENTS TABLE (supports MoMo/Card)
----------------------------------------------------------
 CREATE TABLE `payment` (
   `pay_id` INT(11) NOT NULL AUTO_INCREMENT,
   `order_id` INT(11) NOT NULL,
