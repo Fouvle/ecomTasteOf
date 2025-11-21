@@ -164,7 +164,7 @@ session_start();
     </div>
   </section>
 
-  <!-- Testimonials Section (New) -->
+  <!-- Testimonials Section  -->
   <section class="section-container" style="margin-bottom: 4rem;">
       <h2 style="text-align: center; font-size: 2.5rem; margin-bottom: 3rem;">What Our Users Say</h2>
       
@@ -201,7 +201,7 @@ session_start();
       </div>
   </section>
 
-  <!-- Culinary Stories Section (New) -->
+  <!-- Culinary Stories Section -->
   <section class="section-container" style="margin-bottom: 4rem;">
       <div class="grid-header" style="justify-content: flex-start; gap: 1rem;">
           <i class="fas fa-chart-line" style="color: var(--primary-orange); font-size: 1.5rem;"></i> 
