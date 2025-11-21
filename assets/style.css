@@ -57,7 +57,7 @@ ul {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 0.6rem 1.2rem;
+    padding: 0.5rem 1.2rem;
     border-radius: 6px;
     font-weight: 600;
     font-size: 0.9rem;
@@ -65,11 +65,6 @@ ul {
     border: none;
     transition: all 0.2s ease;
     gap: 0.5rem;
-    width: auto;
-}
-
-.btn-full {
-    width: 100%;
 }
 
 /* Button Variants */
@@ -91,6 +86,16 @@ ul {
 .btn-outline:hover {
     background: #f3f4f6;
     border-color: #9ca3af;
+}
+
+.btn-text {
+    background: transparent;
+    color: var(--gray-text);
+    padding: 0;
+}
+
+.btn-text:hover {
+    color: var(--primary-orange);
 }
 
 /* =========================================
@@ -175,100 +180,81 @@ ul {
 }
 
 /* =========================================
-   4. Discovery Layout (Sidebar + Grid)
+   4. Hero Section
    ========================================= */
-.page-header {
-    margin: 2rem 0;
+.hero {
+    background-color: var(--primary-orange);
+    padding: 4rem 0;
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    min-height: 480px;
 }
 
-.page-header h1 {
+.hero-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 3rem;
+}
+
+.hero-text {
+    flex: 1;
+    max-width: 600px;
+}
+
+.hero-text h1 {
+    font-size: 3rem;
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+}
+
+.hero-text p {
+    font-size: 1.125rem;
+    margin-bottom: 2rem;
+    opacity: 0.95;
+    line-height: 1.6;
+}
+
+.hero-image {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.hero-image img {
+    width: 100%;
+    max-width: 550px;
+    border-radius: 20px;
+    box-shadow: var(--shadow-lg);
+    object-fit: cover;
+}
+
+/* =========================================
+   5. Card Grid System (Vendors/Products)
+   ========================================= */
+.grid-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin: 3rem 0 2rem 0;
+}
+
+.grid-header h2 {
     font-size: 2rem;
     margin: 0 0 0.5rem 0;
     color: var(--dark-text);
 }
 
-.page-header p {
+.grid-header p {
     color: var(--gray-text);
     margin: 0;
 }
 
-.discover-layout {
-    display: grid;
-    grid-template-columns: 280px 1fr; /* Sidebar width + Content */
-    gap: 2rem;
-    margin-bottom: 4rem;
-    align-items: start;
-}
-
-/* Sidebar Styles */
-.filters-sidebar {
-    background: var(--white);
-    padding: 1.5rem;
-    border-radius: 12px;
-    border: 1px solid var(--border-color);
-    position: sticky;
-    top: 100px; /* Stick when scrolling */
-}
-
-.filter-header {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 1.2rem;
-    font-weight: bold;
-    margin-bottom: 1.5rem;
-}
-
-.filter-group {
-    margin-bottom: 1.5rem;
-}
-
-.filter-group label {
-    display: block;
-    font-weight: 600;
-    font-size: 0.9rem;
-    margin-bottom: 0.8rem;
-    color: var(--dark-text);
-}
-
-/* Form Elements in Sidebar */
-.filter-select {
-    width: 100%;
-    padding: 0.6rem;
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    background-color: #f9fafb;
-    font-family: inherit;
-    color: var(--dark-text);
-}
-
-.checkbox-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
-}
-
-.checkbox-item {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    font-size: 0.9rem;
-    color: var(--dark-text);
-    cursor: pointer;
-}
-
-.checkbox-item input[type="checkbox"] {
-    accent-color: var(--primary-orange);
-    width: 16px;
-    height: 16px;
-}
-
-/* =========================================
-   5. Card Grid System
-   ========================================= */
 .grid-container {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 2rem;
 }
 
@@ -278,8 +264,6 @@ ul {
     overflow: hidden;
     border: 1px solid var(--border-color);
     transition: transform 0.2s, box-shadow 0.2s;
-    display: flex;
-    flex-direction: column;
 }
 
 .card:hover {
@@ -318,9 +302,6 @@ ul {
 
 .card-body {
     padding: 1.5rem;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
 }
 
 .card-title {
@@ -335,24 +316,18 @@ ul {
     color: var(--gray-text);
     margin-bottom: 1rem;
     display: -webkit-box;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 2; /* Limit text to 2 lines */
     -webkit-box-orient: vertical;
     overflow: hidden;
-    line-height: 1.5;
 }
 
 .card-meta {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 0.5rem;
+    margin-bottom: 1rem;
     font-size: 0.85rem;
     color: var(--gray-text);
-}
-
-.card-meta i {
-    color: #9ca3af;
-    margin-right: 4px;
 }
 
 .price-highlight {
@@ -364,74 +339,161 @@ ul {
     display: flex;
     gap: 0.5rem;
     flex-wrap: wrap;
-    margin-top: auto; /* Pushes tags to bottom if desc is short */
-    margin-bottom: 1.5rem;
 }
 
 .tag {
-    background: #fff7ed;
-    color: #c2410c;
+    background: #fff7ed; /* Light orange tint */
+    color: #c2410c;      /* Dark orange text */
     padding: 4px 10px;
     border-radius: 4px;
     font-size: 0.75rem;
     font-weight: 600;
 }
 
-/* View Profile Button on Card */
-.card-footer-btn {
-    margin-top: 0.5rem;
-}
-
 /* =========================================
-   6. Pagination
+   6. Testimonials Styles
    ========================================= */
-.pagination {
-    display: flex;
-    justify-content: center;
-    gap: 0.5rem;
-    margin-top: 3rem;
-}
-
-.pagination-link {
-    padding: 0.5rem 1rem;
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
+.testimonial-card {
     background: var(--white);
-    color: var(--dark-text);
-    cursor: pointer;
-    transition: 0.2s;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 }
 
-.pagination-link:hover, .pagination-link.active {
-    background: var(--primary-orange);
-    color: white;
-    border-color: var(--primary-orange);
+.testimonial-card .stars {
+    color: #f59e0b; /* Gold color for stars */
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+}
+
+.testimonial-text {
+    font-size: 1rem;
+    color: var(--dark-text);
+    margin: 0;
+    flex-grow: 1;
+}
+
+.testimonial-user {
+    display: flex;
+    flex-direction: column;
+    font-size: 0.9rem;
+}
+
+.testimonial-user strong {
+    color: var(--dark-text);
+}
+
+.testimonial-user span {
+    color: var(--gray-text);
 }
 
 /* =========================================
-   7. Responsive Design
+   7. Culinary Stories Styles
    ========================================= */
-@media (max-width: 900px) {
-    .discover-layout {
-        grid-template-columns: 1fr; /* Stack Sidebar on top */
-    }
-    
-    .filters-sidebar {
-        position: relative;
-        top: 0;
-        width: 100%;
-    }
+.story-card {
+    border-radius: 12px;
+    overflow: hidden;
+    height: 250px;
+    background: #eee;
+}
 
-    .nav-links {
-        display: none;
-    }
-    
+.story-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.story-card:hover img {
+    transform: scale(1.05);
+}
+
+/* =========================================
+   8. User Dropdown
+   ========================================= */
+.user-menu {
+    position: relative;
+    display: inline-block;
+}
+
+.user-dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: var(--white);
+    min-width: 180px;
+    box-shadow: var(--shadow-lg);
+    z-index: 1001;
+    border-radius: 6px;
+    margin-top: 0.5rem;
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+}
+
+.user-dropdown-content a, 
+.user-dropdown-content button {
+    color: var(--dark-text);
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-family: inherit;
+}
+
+.user-dropdown-content a:hover, 
+.user-dropdown-content button:hover {
+    background-color: #f3f4f6;
+    color: var(--primary-orange);
+}
+
+.user-menu:hover .user-dropdown-content {
+    display: block;
+}
+
+/* =========================================
+   9. Responsive Design
+   ========================================= */
+@media (max-width: 768px) {
     .navbar {
         flex-direction: column;
         gap: 1rem;
+        padding: 1rem;
     }
     
-    .nav-search {
+    .nav-left, .nav-right, .nav-search {
         width: 100%;
+        justify-content: center;
+    }
+    
+    .nav-links {
+        display: none; /* Hide generic links on mobile for now */
+    }
+
+    .hero {
+        padding: 2rem 0;
+        text-align: center;
+    }
+
+    .hero-content {
+        flex-direction: column-reverse;
+        padding: 0 1rem;
+    }
+
+    .hero-text h1 {
+        font-size: 2rem;
+    }
+
+    .grid-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
     }
 }
