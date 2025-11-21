@@ -18,7 +18,7 @@ $initialQuery = htmlspecialchars($_GET['query'] ?? '');
     <meta charset="UTF-8">
     <title>TasteConnect | Search Results</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="assets/style.css">
+    <link rel="stylesheet" href="assets/product_style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
