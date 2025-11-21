@@ -35,23 +35,27 @@ CREATE TABLE vendors (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- =========================================================
--- 3. TRIGGER: ENFORCE CUSTOMER → VENDOR/ADMIN BEFORE CREATING VENDOR RECORD
+-- 3.TRIGGER: ENFORCE CUSTOMER → VENDOR/ADMIN BEFORE CREATING VENDOR PROFILE
 -- =========================================================
 DELIMITER $$
+
 CREATE TRIGGER check_vendor_role
 BEFORE INSERT ON vendors
 FOR EACH ROW
 BEGIN
-    DECLARE role_value ENUM('customer','vendor','admin');
-    SELECT user_role INTO role_value 
-    FROM customer WHERE customer_id = NEW.customer_id;
+    DECLARE role_value VARCHAR(20);
 
-    IF role_value <> 'vendor' AND role_value <> 'admin' THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'User must be upgraded to vendor/admin before creating vendor profile.';
+    SELECT user_role INTO role_value
+    FROM customer
+    WHERE customer_id = NEW.customer_id;
+
+    IF role_value NOT IN ('vendor','admin') THEN
+        SET NEW.business_name = NULL;
     END IF;
 END$$
+
 DELIMITER ;
+
 
 -- =========================================================
 -- 4. CATEGORIES TABLE
