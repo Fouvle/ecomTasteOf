@@ -1,79 +1,47 @@
 <?php
-header('Content-Type: application/json');
+// actions/login_action.php
 session_start();
-ob_start();
+require_once "../settings/connection.php";
 
-$response = array();
-$response['role'] = $_SESSION['role'];
+if (isset($_POST['login_btn'])) {
+    $email = $_POST['email'];
+    $password = $_POST['password'];
 
-error_log('Role: ' . $_SESSION['role']); 
+    // 1. Check Customer Table
+    $sql = "SELECT * FROM customer WHERE customer_email = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-/**
- * Utility function: check if user is logged in
- */
-function isLoggedIn() {
-    return isset($_SESSION['customer_id']);
-}
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        // Verify Password (assuming hashed)
+        if (password_verify($password, $row['customer_pass'])) {
+            $_SESSION['customer_id'] = $row['customer_id'];
+            $_SESSION['customer_name'] = $row['customer_name'];
+            $_SESSION['role'] = 'customer'; 
 
-/**
- * Utility function: check if user is admin
- */
-function isAdmin() {
-    return isset($_SESSION['role']) && $_SESSION['role'] === 'admin';
-}
+            // 2. Check if also a Vendor (As per sketch logic)
+            $vSql = "SELECT * FROM vendors WHERE customer_id = ?";
+            $vStmt = $conn->prepare($vSql);
+            $vStmt->bind_param("i", $row['customer_id']);
+            $vStmt->execute();
+            $vRes = $vStmt->get_result();
 
-// If user already logged in, return status
-if (isLoggedIn()) {
-    $response['status'] = 'success';
-    $response['message'] = 'Already logged in.';
-    $response['customer_id'] = $_SESSION['customer_id'];
-    $response['name'] = $_SESSION['name'];
-    $response['role'] = $_SESSION['role'];
-
-    echo json_encode($response);
-    exit();
-}
-
-require_once '../controllers/customer_controller.php';
-
-// Collect login form data safely
-$email = $_POST['email'] ?? '';
-$password = $_POST['password'] ?? '';
-
-// Validate inputs quickly
-if (empty($email) || empty($password)) {
-    $response['status'] = 'error';
-    $response['message'] = 'Email and password are required';
-    echo json_encode($response);
-    exit();
-}
-
-// Fetch customer by email
-$customer = login_customer_ctr($email, $password);
-
-if ($customer) {
-    if (password_verify($password, $customer['customer_pass'])) {  // NOTE: matches DB column
-        // Set session variables
-        $_SESSION['customer_id']   = $customer['customer_id'];
-        $_SESSION['name']          = $customer['customer_name'];
-        $_SESSION['email']         = $customer['customer_email'];
-        $_SESSION['phone_number']  = $customer['customer_contact'];
-        $_SESSION['role']          = $customer['user_role']; // numeric or 'admin' depending on DB
-
-        $response['status']  = 'success';
-        $response['message'] = 'Login successful';
-        $response['customer_id'] = $customer['customer_id'];
-        $response['name']    = $customer['customer_name'];
-        $response['role']    = $_SESSION['role'];
+            if ($vRes->num_rows > 0) {
+                $vRow = $vRes->fetch_assoc();
+                $_SESSION['role'] = 'vendor';
+                $_SESSION['vendor_id'] = $vRow['vendor_id'];
+                header("Location: ../admin/vendor_dashboard.php");
+            } else {
+                header("Location: ../index.php");
+            }
+        } else {
+            echo "Invalid password.";
+        }
     } else {
-        $response['status'] = 'error';
-        $response['message'] = 'Invalid password';
+        echo "User not found.";
     }
-} else {
-    $response['status'] = 'error';
-    $response['message'] = 'No account found with that email';
 }
-
-echo json_encode($response);
-exit();
 ?>
