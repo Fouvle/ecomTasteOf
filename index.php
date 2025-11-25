@@ -24,7 +24,7 @@ session_start();
       </a>
       <div class="nav-links">
         <a href="index.php" style="color:var(--primary-orange);">Home</a>
-        <a href="all_product.php">Discover</a>
+        <a href="all_products.php">Discover</a>
         <a href="#">Vendors</a>
         <a href="#">Book Experience</a>
         <a href="#">About Us</a>
