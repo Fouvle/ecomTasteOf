@@ -1,23 +1,19 @@
-// js/vendor_dashboard.js
 $(document).ready(function() {
+    
     // Tab Switching Logic
     $('.dash-tab').click(function() {
-        // Remove active class from all tabs
         $('.dash-tab').removeClass('active');
         $('.tab-content').removeClass('active');
-        
-        // Add active to clicked tab
         $(this).addClass('active');
-        
-        // Show target content
         const target = $(this).data('target');
         $(target).addClass('active');
     });
 
-    // Load Products for Vendor (Reusing your previous fetch_product_action logic)
+    // Load Vendor Products
     loadVendorProducts();
 
     function loadVendorProducts() {
+        const tbody = $('#product-table-body');
         $.ajax({
             url: "../actions/fetch_product_action.php",
             method: "GET",
@@ -26,22 +22,103 @@ $(document).ready(function() {
                 let rows = '';
                 if(response.status === 'success' && response.data.length > 0) {
                     response.data.forEach(p => {
-                        const img = p.product_image ? '../'+p.product_image : '../assets/placeholder.png';
+                        const img = p.product_image ? '../'+p.product_image : 'https://placehold.co/50x50/orange/white?text=Img';
                         rows += `
                             <tr>
-                                <td><img src="${img}" style="width:50px; height:50px; border-radius:4px;"></td>
-                                <td>${p.product_title}</td>
-                                <td>₵${p.product_price}</td>
-                                <td>${p.cat_name}</td>
-                                <td><button class="btn btn-sm btn-outline">Edit</button></td>
+                                <td><img src="${img}" style="width:50px; height:50px; border-radius:4px; object-fit:cover;"></td>
+                                <td style="font-weight:600;">${p.product_title}</td>
+                                <td>₵${parseFloat(p.product_price).toFixed(2)}</td>
+                                <td><span style="background:#f3f4f6; padding:2px 6px; border-radius:4px; font-size:0.85rem;">${p.cat_name}</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline" onclick="alert('Product edit feature separate')"><i class="fas fa-edit"></i></button>
+                                </td>
                             </tr>
                         `;
                     });
                 } else {
-                    rows = '<tr><td colspan="5">No products found. Add one!</td></tr>';
+                    rows = '<tr><td colspan="5" style="text-align:center; color:gray;">No products found. Start by adding one!</td></tr>';
                 }
-                $('#product-table-body').html(rows);
+                tbody.html(rows);
             }
         });
     }
+
+    // Handle Edit Booking Form Submit
+    $('#editBookingForm').submit(function(e) {
+        e.preventDefault();
+        const formData = $(this).serialize();
+        
+        $.ajax({
+            url: '../actions/manage_booking_action.php',
+            type: 'POST',
+            data: formData,
+            dataType: 'json',
+            success: function(res) {
+                if(res.status === 'success') {
+                    Swal.fire('Updated!', res.message, 'success').then(() => location.reload());
+                } else {
+                    Swal.fire('Error', res.message, 'error');
+                }
+            }
+        });
+    });
 });
+
+// --- Global Functions for Booking Management ---
+
+function updateStatus(id, status) {
+    Swal.fire({
+        title: `Mark as ${status}?`,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#ea580c',
+        confirmButtonText: 'Yes'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.post('../actions/manage_booking_action.php', { 
+                action: 'update_status', 
+                booking_id: id, 
+                status: status 
+            }, function(res) {
+                if(res.status === 'success') {
+                    Swal.fire('Success', res.message, 'success').then(() => location.reload());
+                } else {
+                    Swal.fire('Error', res.message, 'error');
+                }
+            }, 'json');
+        }
+    });
+}
+
+function deleteBooking(id) {
+    Swal.fire({
+        title: 'Delete this booking?',
+        text: "This cannot be undone!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#ef4444',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.post('../actions/manage_booking_action.php', { 
+                action: 'delete', 
+                booking_id: id 
+            }, function(res) {
+                if(res.status === 'success') {
+                    $('#row-' + id).remove();
+                    Swal.fire('Deleted!', 'Booking has been removed.', 'success');
+                } else {
+                    Swal.fire('Error', res.message, 'error');
+                }
+            }, 'json');
+        }
+    });
+}
+
+function editBooking(id, date, time, people) {
+    $('#edit_booking_id').val(id);
+    $('#edit_date').val(date);
+    $('#edit_time').val(time);
+    $('#edit_people').val(people);
+    document.getElementById('editBookingModal').style.display = 'block';
+}
