@@ -1,7 +1,7 @@
 <?php
 session_start();
 // Robust check for connection file
-$connPath = "../settings/connection.php";
+$connPath = "../settings/db_cred.php";
 if (!file_exists($connPath)) {
     die("Error: Connection file not found at $connPath");
 }

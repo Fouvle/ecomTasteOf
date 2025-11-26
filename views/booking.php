@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once "../settings/connection.php";
+require_once "../settings/db_cred.php";
 
 // Ensure User is Logged In
 if (!isset($_SESSION['customer_id'])) {

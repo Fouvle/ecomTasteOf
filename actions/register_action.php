@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once "../settings/connection.php";
+require_once "../settings/db_cred.php";
 
 if (isset($_POST['register_btn'])) {
     // 1. Sanitize Inputs

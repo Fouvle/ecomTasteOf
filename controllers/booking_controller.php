@@ -1,6 +1,6 @@
 <?php
 // controllers/booking_controller.php
-require_once dirname(__FILE__) . '/../settings/connection.php';
+require_once dirname(__FILE__) . '/../settings/db_cred.php';
 
 // 1. Create a New Booking
 function create_booking_ctr($customer_id, $vendor_id, $datetime, $people) {
