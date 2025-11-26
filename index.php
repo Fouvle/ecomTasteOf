@@ -26,6 +26,7 @@ session_start();
         <a href="index.php" style="color:var(--primary-orange);">Home</a>
         <a href="views/all_products.php">Discover</a>
         <a href="views/all_vendors.php">Vendors</a>
+        <a href="login/vendor_register.php">Become a Vendor</a>
         <a href="#">Book Experience</a>
         <a href="#">About Us</a>
       </div>
