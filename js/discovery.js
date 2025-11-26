@@ -56,46 +56,28 @@ $(document).ready(function() {
                     response.data.forEach(item => {
                         // Use uploaded image or placeholder
                         const imgPath = item.product_image ? '../'+item.product_image : 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60';
-
-                        const basePath = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1);
-                        // inside the success loop, replace the anchor generation with:
-                        const vendorUrl = basePath + 'single_vendor_page.php?product_id=' + encodeURIComponent(item.product_id);
                         
                         const card = `
                             <div class="product-card">
                                 <img src="${imgPath}" class="card-img" alt="${item.product_title}">
                                 <div class="card-content">
                                     <h3 class="card-title">${item.product_title}</h3>
-                                    <div class="card-vendor"><i class="fas fa-store"></i> ${item.business_name}</div>
-                                    <div class="card-vendor"><i class="fas fa-map-marker-alt"></i> ${item.customer_city}</div>
-                                    <div style="margin-top:0.5rem; font-size:0.8rem; color:gray;">${item.product_desc.substring(0, 60)}...</div>
+                                    <div class="card-vendor">
+                                        <i class="fas fa-store"></i> ${item.business_name}
+                                    </div>
+                                    <div class="card-vendor">
+                                        <i class="fas fa-map-marker-alt"></i> ${item.customer_city}
+                                    </div>
+                                    <div style="margin-top:0.5rem; font-size:0.8rem; color:gray;">
+                                        ${item.product_desc.substring(0, 60)}...
+                                    </div>
                                     <div class="card-price">₵${parseFloat(item.product_price).toFixed(2)}</div>
-                                    <a href="${vendorUrl}" class="btn btn-primary" style="text-align:center; margin-top:1rem; font-size:0.9rem;">View Item</a>
+                                    
+                                    <a href="single_vendor_page.php?product_id=${item.product_id}" class="btn btn-primary" style="text-align:center; margin-top:1rem; font-size:0.9rem;">View Item</a>
                                 </div>
                             </div>
                         `;
                         container.append(card);
-                        // const card = `
-                        //     <div class="product-card">
-                        //         <img src="${imgPath}" class="card-img" alt="${item.product_title}">
-                        //         <div class="card-content">
-                        //             <h3 class="card-title">${item.product_title}</h3>
-                        //             <div class="card-vendor">
-                        //                 <i class="fas fa-store"></i> ${item.business_name}
-                        //             </div>
-                        //             <div class="card-vendor">
-                        //                 <i class="fas fa-map-marker-alt"></i> ${item.customer_city}
-                        //             </div>
-                        //             <div style="margin-top:0.5rem; font-size:0.8rem; color:gray;">
-                        //                 ${item.product_desc.substring(0, 60)}...
-                        //             </div>
-                        //             <div class="card-price">₵${parseFloat(item.product_price).toFixed(2)}</div>
-                                    
-                        //             <a href="single_vendor_page.php?product_id=${item.product_id}" class="btn btn-primary" style="text-align:center; margin-top:1rem; font-size:0.9rem;">View Item</a>
-                        //         </div>
-                        //     </div>
-                        // `;
-                        // container.append(card);
                     });
                 } else {
                     container.html(`
