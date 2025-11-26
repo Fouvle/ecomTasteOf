@@ -1,5 +1,11 @@
 <?php
 session_start();
+
+session_start();
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+
 require_once "../settings/db_cred.php";
 
 // Fetch Categories for the Filter Sidebar
