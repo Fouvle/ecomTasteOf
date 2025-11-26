@@ -1,5 +1,9 @@
 <?php
 session_start();
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 require_once "../settings/db_cred.php";
 require_once "../controllers/vendor_controller.php"; // For fetching events
 
