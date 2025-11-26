@@ -81,7 +81,7 @@ session_start();
         <?php endif; ?>
         
         <div style="display:flex; gap:1rem;">
-          <a href="views/all_product.php" class="btn btn-outline" style="color:var(--primary-orange); border:none; font-weight:bold; background:white; padding: 0.8rem 1.5rem;">
+          <a href="views/all_products.php" class="btn btn-outline" style="color:var(--primary-orange); border:none; font-weight:bold; background:white; padding: 0.8rem 1.5rem;">
             Explore Now <i class="fas fa-arrow-right"></i>
           </a>
         </div>
@@ -99,7 +99,7 @@ session_start();
             <h2>Featured Vendors</h2>
             <p>Top-rated local restaurants and food vendors</p>
         </div>
-        <a href="all_product.php" class="btn btn-outline">View All <i class="fas fa-arrow-right"></i></a>
+        <a href="all_products.php" class="btn btn-outline">View All <i class="fas fa-arrow-right"></i></a>
     </div>
 
     <div class="grid-container">
