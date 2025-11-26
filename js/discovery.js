@@ -89,8 +89,10 @@ $(document).ready(function() {
                     `);
                 }
             },
-            error: function() {
-                $('#products-container').html('<p style="color:red; text-align:center;">Failed to load products.</p>');
+            error: function(xhr, status, error) {
+                console.log("AJAX Error:", status, error);
+                console.log("Response:", xhr.responseText);
+                $('#products-container').html('<p style="color:red; text-align:center;">Failed to load products. Error: ' + error + '</p>');
             }
         });
     }
@@ -104,4 +106,6 @@ $(document).ready(function() {
             timeout = setTimeout(() => func.apply(context, args), wait);
         };
     }
+
+    
 });
