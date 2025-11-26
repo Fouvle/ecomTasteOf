@@ -86,7 +86,7 @@
             color: white;
         }
         .step-label {
-            position: absolute;
+            position: relative;
             top: 50px;
             left: 50%;
             transform: translateX(-50%);
