@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once "../settings/connection.php";
+require_once "../settings/db_cred.php";
 require_once "../controllers/vendor_controller.php"; // For fetching events
 
 $product_id = $_GET['id'] ?? 0;
