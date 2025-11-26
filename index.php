@@ -33,7 +33,7 @@ session_start();
 
     <div class="nav-search">
         <i class="fas fa-search"></i>
-        <form action="all_product.php" method="get" style="width:100%; display:flex;">
+        <form action="all_products.php" method="get" style="width:100%; display:flex;">
             <input type="text" name="q" placeholder="Search for restaurants, dishes...">
         </form>
     </div>

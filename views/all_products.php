@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once "../settings/connection.php";
+require_once "../settings/db_cred.php";
 
 // Fetch Categories for the Filter Sidebar
 $catSql = "SELECT * FROM categories ORDER BY cat_name ASC";
