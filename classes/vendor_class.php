@@ -1,6 +1,8 @@
 <?php
 // classes/vendor_class.php
-require_once dirname(__FILE__) . '/../settings/connection.php';
+// Ensure we include the correct DB credentials file. some environments use `db_cred.php`.
+// Use __DIR__ to build an absolute path relative to this file.
+require_once __DIR__ . '/../settings/db_cred.php';
 
 class Vendor {
     public function getVendorByCustomerId($id) {
