@@ -73,7 +73,7 @@ $(document).ready(function() {
                                     </div>
                                     <div class="card-price">₵${parseFloat(item.product_price).toFixed(2)}</div>
                                     
-                                    <a href="../views/single_vendor_page.php?id=${item.product_id}" class="btn btn-primary" style="text-align:center; margin-top:1rem; font-size:0.9rem;">View Item</a>
+                                    <a href="../views/single_vendor_page.php?product_id=${item.product_id}" class="btn btn-primary" style="text-align:center; margin-top:1rem; font-size:0.9rem;">View Item</a>
                                 </div>
                             </div>
                         `;
