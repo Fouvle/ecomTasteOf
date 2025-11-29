@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once "../settings/connection.php";
+require_once "../settings/db_cred.php";
 
 if (isset($_POST['vendor_login_btn'])) {
     $email = trim($_POST['email']);
