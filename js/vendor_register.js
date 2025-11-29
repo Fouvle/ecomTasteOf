@@ -1,34 +1,75 @@
-function nextStep(currentStep) {
-    // 1. Validate current step fields
-    const currentSection = document.getElementById(`step${currentStep}`);
-    const inputs = currentSection.querySelectorAll('input[required], select[required], textarea[required]');
-    let isValid = true;
+// js/vendor_register.js
 
-    inputs.forEach(input => {
-        if (!input.value.trim()) {
-            input.style.borderColor = 'red';
-            isValid = false;
+function updateProgress(step) {
+    const totalSteps = 4;
+    // Calculate percentage: (step - 1) / (totalSteps - 1) * 100
+    // Step 1 = 0%, Step 4 = 100%
+    const percentage = ((step - 1) / (totalSteps - 1)) * 100;
+    
+    document.getElementById('progressFill').style.width = percentage + '%';
+    
+    // Update circles
+    document.querySelectorAll('.step').forEach(s => {
+        const sNum = parseInt(s.getAttribute('data-step'));
+        if (sNum <= step) {
+            s.classList.add('active');
         } else {
-            input.style.borderColor = '#d1d5db';
+            s.classList.remove('active');
         }
     });
+}
 
-    if (!isValid) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Missing Information',
-            text: 'Please fill in all required fields marked with *',
-            confirmButtonColor: '#ea580c'
-        });
-        return;
+function nextStep(currentStep) {
+    // 1. Validate fields in the current step
+    const currentSection = document.getElementById(`step${currentStep}`);
+    const requiredInputs = currentSection.querySelectorAll('input[required], select[required], textarea[required]');
+    let isValid = true;
+
+    // Remove previous error highlights
+    requiredInputs.forEach(input => input.style.borderColor = '#d1d5db');
+
+    for (let input of requiredInputs) {
+        if (!input.value.trim()) {
+            input.style.borderColor = '#ef4444'; // Red border
+            input.focus();
+            isValid = false;
+            
+            // Simple toast notification
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'warning',
+                title: 'Please fill in all required fields.',
+                showConfirmButton: false,
+                timer: 3000
+            });
+            return; // Stop at first invalid field
+        }
     }
 
-    // 2. Move UI
+    // Special validation for checkboxes in Step 1 and Step 3
+    if (currentStep === 1) {
+        const cuisines = document.querySelectorAll('input[name="cuisine_type[]"]:checked');
+        if (cuisines.length === 0) {
+            Swal.fire({ icon:'warning', text: 'Please select at least one Cuisine Type.' });
+            return;
+        }
+    }
+    
+    if (currentStep === 3) {
+        const days = document.querySelectorAll('input[name="operating_days[]"]:checked');
+        if (days.length === 0) {
+            Swal.fire({ icon:'warning', text: 'Please select at least one Operating Day.' });
+            return;
+        }
+    }
+
+    // 2. Hide current, Show next
     document.getElementById(`step${currentStep}`).style.display = 'none';
     document.getElementById(`step${currentStep + 1}`).style.display = 'block';
     
-    // Update Progress Bar
-    document.querySelector(`.step[data-step="${currentStep + 1}"]`).classList.add('active');
+    // 3. Update Progress
+    updateProgress(currentStep + 1);
     window.scrollTo(0, 0);
 }
 
@@ -36,22 +77,20 @@ function prevStep(currentStep) {
     document.getElementById(`step${currentStep}`).style.display = 'none';
     document.getElementById(`step${currentStep - 1}`).style.display = 'block';
     
-    // Update Progress Bar
-    document.querySelector(`.step[data-step="${currentStep}"]`).classList.remove('active');
+    updateProgress(currentStep - 1);
     window.scrollTo(0, 0);
 }
 
-// Handle Submission
+// Handle Form Submission
 $(document).ready(function() {
     $('#vendorForm').on('submit', function(e) {
         e.preventDefault();
 
-        // Gather Data
         const formData = new FormData(this);
 
         Swal.fire({
             title: 'Submitting Application...',
-            text: 'Please wait while we process your details.',
+            text: 'Processing your business details',
             allowOutsideClick: false,
             didOpen: () => { Swal.showLoading() }
         });
@@ -67,16 +106,16 @@ $(document).ready(function() {
                 if (response.status === 'success') {
                     Swal.fire({
                         icon: 'success',
-                        title: 'Welcome to TasteConnect!',
-                        text: 'Your vendor application has been submitted successfully.',
+                        title: 'Success!',
+                        text: 'Vendor account created. Please login.',
                         confirmButtonColor: '#ea580c'
                     }).then(() => {
-                        window.location.href = 'login.php'; // Redirect to standard login
+                        window.location.href = 'login.php';
                     });
                 } else {
                     Swal.fire({
                         icon: 'error',
-                        title: 'Registration Failed',
+                        title: 'Registration Error',
                         text: response.message,
                         confirmButtonColor: '#ea580c'
                     });
@@ -86,7 +125,7 @@ $(document).ready(function() {
                 Swal.fire({
                     icon: 'error',
                     title: 'System Error',
-                    text: 'Could not reach the server. Please try again.',
+                    text: 'Could not connect to the server.',
                     confirmButtonColor: '#ea580c'
                 });
             }
