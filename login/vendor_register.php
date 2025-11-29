@@ -26,7 +26,7 @@
             padding: 0;
         }
 
-        /* Navbar (Simplified) */
+        /* Navbar */
         .navbar {
             background: white;
             padding: 1rem 2rem;
@@ -38,39 +38,52 @@
         .logo { font-weight: 800; font-size: 1.5rem; color: var(--primary-orange); text-decoration: none; }
         .nav-btn { padding: 0.5rem 1rem; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 0.9rem; }
         .btn-login { border: 1px solid var(--border-color); color: var(--dark-text); margin-right: 1rem; }
-        .btn-register { background: var(--primary-orange); color: white; }
 
-        /* Wizard Container */
-        .container { max-width: 900px; margin: 3rem auto; padding: 0 1.5rem; }
+        /* Container */
+        .container { max-width: 800px; margin: 3rem auto; padding: 0 1.5rem; }
         
         .header-section { margin-bottom: 2rem; }
-        .header-section h1 { font-size: 2rem; margin-bottom: 0.5rem; }
-        .header-section p { color: var(--gray-text); }
+        .header-section h1 { font-size: 2.2rem; margin-bottom: 0.5rem; color: var(--dark-text); }
+        .header-section p { color: var(--gray-text); font-size: 1.1rem; }
 
-        /* Progress Bar */
+        /* Progress Bar (Matches Screenshot Style) */
         .progress-container {
             display: flex;
             justify-content: space-between;
             margin-bottom: 3rem;
             position: relative;
+            padding: 0 1rem;
         }
-        .progress-container::before {
-            content: '';
+        .progress-bar-bg {
             position: absolute;
-            top: 50%;
+            top: 15px;
             left: 0;
             width: 100%;
-            height: 2px;
+            height: 3px;
             background: #e5e7eb;
             z-index: 0;
-            transform: translateY(-50%);
         }
-        .step {
+        .progress-bar-fill {
+            position: absolute;
+            top: 15px;
+            left: 0;
+            height: 3px;
+            background: var(--primary-orange);
+            z-index: 0;
+            transition: width 0.3s ease;
+            width: 0%; /* JS will update this */
+        }
+        
+        .step-wrapper {
             position: relative;
             z-index: 1;
+            text-align: center;
+            width: 80px;
+        }
+        .step {
             background: white;
-            width: 40px;
-            height: 40px;
+            width: 35px;
+            height: 35px;
             border-radius: 50%;
             border: 2px solid #e5e7eb;
             display: flex;
@@ -78,6 +91,7 @@
             justify-content: center;
             font-weight: bold;
             color: var(--gray-text);
+            margin: 0 auto 0.5rem auto;
             transition: 0.3s;
         }
         .step.active {
@@ -85,41 +99,43 @@
             background: var(--primary-orange);
             color: white;
         }
-        .step-label {
-            position: relative;
-            top: 50px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 0.8rem;
-            color: var(--gray-text);
-            white-space: nowrap;
+        .step.completed {
+            background: var(--primary-orange);
+            border-color: var(--primary-orange);
+            color: white;
         }
+        .step-label { font-size: 0.8rem; color: var(--gray-text); }
         .step.active + .step-label { color: var(--primary-orange); font-weight: 600; }
 
-        /* Form Sections */
+        /* Form Styling */
         .form-section {
             background: white;
             padding: 2.5rem;
             border-radius: 12px;
             border: 1px solid var(--border-color);
             display: none; /* Hidden by default */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
         }
-        .form-section.current { display: block; }
+        .form-section.current { display: block; animation: fadeIn 0.4s ease; }
 
-        .section-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 1.5rem; border-bottom: 1px solid #f3f4f6; padding-bottom: 1rem; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .section-header { font-size: 1.3rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--dark-text); }
 
         .form-group { margin-bottom: 1.5rem; }
-        .form-label { display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.9rem; }
+        .form-label { display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.95rem; }
+        
         .form-control {
             width: 100%;
-            padding: 0.75rem;
+            padding: 0.8rem;
             border: 1px solid #d1d5db;
-            border-radius: 6px;
+            border-radius: 8px;
             font-size: 1rem;
             box-sizing: border-box;
             font-family: inherit;
+            background: #f9fafb;
         }
-        .form-control:focus { outline: 2px solid var(--primary-orange); border-color: transparent; }
+        .form-control:focus { outline: none; border-color: var(--primary-orange); background: white; box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.1); }
 
         /* Checkbox Grid */
         .checkbox-grid {
@@ -127,7 +143,7 @@
             grid-template-columns: repeat(2, 1fr);
             gap: 1rem;
         }
-        .checkbox-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.95rem; }
+        .checkbox-item { display: flex; align-items: center; gap: 0.6rem; font-size: 0.95rem; cursor: pointer; }
         .checkbox-item input { accent-color: var(--primary-orange); width: 18px; height: 18px; }
 
         /* Buttons */
@@ -135,27 +151,33 @@
             display: flex;
             justify-content: space-between;
             margin-top: 2rem;
+            border-top: 1px solid #f3f4f6;
+            padding-top: 1.5rem;
         }
         .btn {
-            padding: 0.8rem 1.5rem;
-            border-radius: 6px;
+            padding: 0.8rem 1.8rem;
+            border-radius: 8px;
             font-weight: 600;
             cursor: pointer;
             border: none;
             font-size: 1rem;
+            transition: 0.2s;
         }
         .btn-next { background: var(--primary-orange); color: white; }
+        .btn-next:hover { background: var(--primary-hover); }
         .btn-prev { background: white; border: 1px solid #d1d5db; color: var(--dark-text); }
+        .btn-prev:hover { background: #f3f4f6; }
         
-        .file-upload-box {
+        .file-box {
             border: 2px dashed #d1d5db;
             padding: 2rem;
             text-align: center;
             border-radius: 8px;
             cursor: pointer;
             background: #f9fafb;
+            transition: 0.2s;
         }
-        .file-upload-box:hover { border-color: var(--primary-orange); }
+        .file-box:hover { border-color: var(--primary-orange); background: #fff7ed; }
 
     </style>
 </head>
@@ -164,31 +186,46 @@
     <nav class="navbar">
         <a href="../index.php" class="logo">TC TasteConnect</a>
         <div>
-            <span style="margin-right:1rem; color:var(--gray-text);">Already a vendor?</span>
+            <span style="margin-right:1rem; color:var(--gray-text); display:none; @media(min-width:600px){display:inline;}">Already selling?</span>
             <a href="login.php" class="nav-btn btn-login">Login</a>
         </div>
     </nav>
 
     <div class="container">
         <div class="header-section">
-            <a href="../index.php" style="text-decoration:none; color:var(--dark-text); font-size:0.9rem;"><i class="fas fa-arrow-left"></i> Back to Home</a>
+            <a href="../index.php" style="text-decoration:none; color:var(--dark-text); font-size:0.9rem; margin-bottom:1rem; display:inline-block;"><i class="fas fa-arrow-left"></i> Back to Home</a>
             <h1>Become a Vendor</h1>
-            <p>Join Ghana's premier food experience platform and connect with thousands of food lovers.</p>
+            <p>Join Ghana's premier food experience platform in 4 easy steps.</p>
         </div>
 
         <!-- Progress Steps -->
         <div class="progress-container">
-            <div class="step active" data-step="1">1</div><span class="step-label">Business Info</span>
-            <div class="step" data-step="2">2</div><span class="step-label">Location</span>
-            <div class="step" data-step="3">3</div><span class="step-label">Operations</span>
-            <div class="step" data-step="4">4</div><span class="step-label">Legal & Payment</span>
+            <div class="progress-bar-bg"></div>
+            <div class="progress-bar-fill" id="progressFill"></div>
+            
+            <div class="step-wrapper">
+                <div class="step active" data-step="1">1</div>
+                <div class="step-label">Business Info</div>
+            </div>
+            <div class="step-wrapper">
+                <div class="step" data-step="2">2</div>
+                <div class="step-label">Location</div>
+            </div>
+            <div class="step-wrapper">
+                <div class="step" data-step="3">3</div>
+                <div class="step-label">Operations</div>
+            </div>
+            <div class="step-wrapper">
+                <div class="step" data-step="4">4</div>
+                <div class="step-label">Legal & Payment</div>
+            </div>
         </div>
 
         <form id="vendorForm" enctype="multipart/form-data">
             
             <!-- STEP 1: Business Info -->
             <div class="form-section current" id="step1">
-                <div class="section-title">Business Information</div>
+                <div class="section-header">Business Information</div>
                 
                 <div class="form-group">
                     <label class="form-label">Business Name *</label>
@@ -224,7 +261,7 @@
 
                 <div class="form-group">
                     <label class="form-label">Business Description *</label>
-                    <textarea name="business_description" class="form-control" rows="4" placeholder="Tell us about your food, specialty dishes..." required></textarea>
+                    <textarea name="business_description" class="form-control" rows="4" placeholder="Tell us about your food, specialty dishes..." required minlength="50"></textarea>
                     <small style="color:gray;">Min 50 characters</small>
                 </div>
 
@@ -239,14 +276,14 @@
                 </div>
 
                 <div class="btn-group">
-                    <div></div> <!-- Spacer -->
+                    <div></div> 
                     <button type="button" class="btn btn-next" onclick="nextStep(1)">Next Step</button>
                 </div>
             </div>
 
             <!-- STEP 2: Location -->
             <div class="form-section" id="step2">
-                <div class="section-title">Location & Contact Information</div>
+                <div class="section-header">Location & Contact</div>
 
                 <div class="form-group">
                     <label class="form-label">Street Address *</label>
@@ -289,7 +326,7 @@
 
             <!-- STEP 3: Operations -->
             <div class="form-section" id="step3">
-                <div class="section-title">Operating Details</div>
+                <div class="section-header">Operating Details</div>
 
                 <div class="form-group">
                     <label class="form-label">Seating Capacity *</label>
@@ -297,7 +334,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Operating Days * (Select all that apply)</label>
+                    <label class="form-label">Operating Days *</label>
                     <div class="checkbox-grid">
                         <label class="checkbox-item"><input type="checkbox" name="operating_days[]" value="Monday"> Monday</label>
                         <label class="checkbox-item"><input type="checkbox" name="operating_days[]" value="Tuesday"> Tuesday</label>
@@ -321,12 +358,12 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Menu Upload (PDF/Image)</label>
-                    <div class="file-upload-box" onclick="document.getElementById('menuFile').click()">
+                    <label class="form-label">Menu Upload (Optional)</label>
+                    <div class="file-box" onclick="document.getElementById('menuFile').click()">
                         <i class="fas fa-cloud-upload-alt" style="font-size:2rem; color:var(--gray-text);"></i>
-                        <p style="margin:0.5rem 0;">Click to upload Menu PDF (Optional)</p>
+                        <p style="margin:0.5rem 0;">Click to upload Menu PDF or Image</p>
                         <input type="file" name="menu_file" id="menuFile" style="display:none;" accept=".pdf,.jpg,.png">
-                        <span id="fileName" style="font-size:0.9rem; color:var(--primary-orange);"></span>
+                        <span id="fileName" style="font-size:0.9rem; color:var(--primary-orange); font-weight:bold;"></span>
                     </div>
                 </div>
 
@@ -338,31 +375,35 @@
 
             <!-- STEP 4: Legal & Payment -->
             <div class="form-section" id="step4">
-                <div class="section-title">Legal & Payment Information</div>
+                <div class="section-header">Legal & Payment Information</div>
 
-                <div style="background:#fff7ed; padding:1rem; border-radius:8px; margin-bottom:1.5rem; font-size:0.9rem; color:#c2410c;">
-                    <i class="fas fa-info-circle"></i> This information is used for verification and payouts.
+                <div style="background:#fff7ed; padding:1rem; border-radius:8px; margin-bottom:1.5rem; font-size:0.95rem; color:#c2410c; border:1px solid #fed7aa;">
+                    <i class="fas fa-user-lock"></i> <strong>Account Setup:</strong> Please provide your details to create your vendor account login.
                 </div>
 
-                <!-- Owner Info (Maps to Customer Table) -->
+                <!-- Owner Info / Login Info -->
                 <div class="form-group">
                     <label class="form-label">Owner Full Name *</label>
                     <input type="text" name="owner_name" class="form-control" required>
                 </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Owner Phone *</label>
+                    <input type="tel" name="owner_phone" class="form-control" required>
+                </div>
+
                 <div style="display:flex; gap:1rem;">
                     <div class="form-group" style="flex:1;">
-                        <label class="form-label">Owner Phone *</label>
-                        <input type="tel" name="owner_phone" class="form-control" required>
-                    </div>
-                    <div class="form-group" style="flex:1;">
-                        <label class="form-label">Owner Email (Login Email) *</label>
+                        <label class="form-label">Login Email *</label>
                         <input type="email" name="owner_email" class="form-control" required>
                     </div>
+                    <div class="form-group" style="flex:1;">
+                        <label class="form-label">Login Password *</label>
+                        <input type="password" name="password" class="form-control" required minlength="6">
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label class="form-label">Password *</label>
-                    <input type="password" name="password" class="form-control" required>
-                </div>
+
+                <hr style="border:0; border-top:1px solid #eee; margin:2rem 0;">
 
                 <!-- Payment Info -->
                 <div style="display:flex; gap:1rem;">
@@ -391,15 +432,15 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="checkbox-item">
-                        <input type="checkbox" required> 
-                        I agree to the Terms of Service and Privacy Policy. I understand the 15% commission structure.
+                    <label class="checkbox-item" style="align-items:flex-start;">
+                        <input type="checkbox" required style="margin-top:4px;"> 
+                        <span style="font-size:0.9rem; line-height:1.4;">I agree to the Terms of Service and Privacy Policy. I understand the 15% commission structure on bookings.</span>
                     </label>
                 </div>
 
                 <div class="btn-group">
                     <button type="button" class="btn btn-prev" onclick="prevStep(4)">Previous</button>
-                    <button type="submit" class="btn btn-next" style="background:#166534;">Submit Application</button>
+                    <button type="submit" class="btn btn-next" style="background:#166534; hover:background:#14532d;">Submit Application</button>
                 </div>
             </div>
 
@@ -408,9 +449,10 @@
 
     <script src="../js/vendor_register.js"></script>
     <script>
-        // Simple file name display
         document.getElementById('menuFile').onchange = function() {
-            document.getElementById('fileName').textContent = this.files[0].name;
+            if(this.files.length > 0) {
+                document.getElementById('fileName').textContent = "Selected: " + this.files[0].name;
+            }
         };
     </script>
 </body>
