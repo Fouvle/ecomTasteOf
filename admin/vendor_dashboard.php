@@ -2,7 +2,7 @@
 session_start();
 if (!isset($_SESSION['vendor_id'])) { header("Location: ../login/vendor_login.php"); exit; }
 
-require_once "../settings/connection.php";
+require_once "../settings/db_cred.php";
 
 $vendor_id = $_SESSION['vendor_id'];
 
