@@ -1,18 +1,18 @@
 <?php
 session_start();
-require_once "../settings/db_cred.php";
+require_once "../settings/connection.php";
 
 header('Content-Type: application/json');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
-    // 1. Owner / Auth Details (For Customer Table)
+    // 1. Owner / Auth Details (Step 4)
     $owner_name = $_POST['owner_name'];
     $owner_email = $_POST['owner_email'];
     $owner_phone = $_POST['owner_phone'];
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
     
-    // Check Email
+    // Check if email exists
     $check = $conn->prepare("SELECT customer_id FROM customer WHERE customer_email = ?");
     $check->bind_param("s", $owner_email);
     $check->execute();
@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    // 2. Vendor Business Details
+    // 2. Business Details (Steps 1-3)
     $bus_name = $_POST['business_name'];
     $bus_type = $_POST['business_type'];
     $cuisine = isset($_POST['cuisine_type']) ? implode(',', $_POST['cuisine_type']) : '';
@@ -39,6 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $open_time = $_POST['opening_time'];
     $close_time = $_POST['closing_time'];
     
+    // Payment (Step 4)
     $momo_prov = $_POST['momo_provider'];
     $momo_num = $_POST['momo_number'];
     $reg_no = $_POST['business_reg_no'] ?? '';
@@ -71,7 +72,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $customer_id = $stmt1->insert_id;
 
         // B. Insert into Vendors Table
-        // Note: 'verified' is 0 by default pending approval
         $vSql = "INSERT INTO vendors (
                     customer_id, business_name, business_type, cuisine_type, business_description, price_range,
                     business_address, business_city, business_phone, business_email, website,
