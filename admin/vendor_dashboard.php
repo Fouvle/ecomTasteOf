@@ -94,25 +94,25 @@ $recent_bookings = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
                 <a href="#" class="nav-item active" data-target="overview">
                     <i class="fas fa-th-large"></i> Overview
                 </a>
-                <a href="#" class="nav-item" data-target="events">
+                <a href="events_admin.php" class="nav-item" data-target="events">
                     <i class="fas fa-calendar-alt"></i> Events
                 </a>
-                <a href="#" class="nav-item" data-target="menu">
+                <a href="menu_admin.php" class="nav-item" data-target="menu">
                     <i class="fas fa-utensils"></i> Menu Items
                 </a>
-                <a href="#" class="nav-item" data-target="bookings">
+                <a href="bookings_admin.php" class="nav-item" data-target="bookings">
                     <i class="fas fa-clipboard-list"></i> Bookings
                 </a>
-                <a href="#" class="nav-item" data-target="payments">
+                <a href="payments_admin.php" class="nav-item" data-target="payments">
                     <i class="fas fa-wallet"></i> Payments
                 </a>
-                <a href="#" class="nav-item" data-target="analytics">
+                <a href="analytics_admin.php" class="nav-item" data-target="analytics">
                     <i class="fas fa-chart-bar"></i> Analytics
                 </a>
-                <a href="#" class="nav-item" data-target="reviews">
+                <a href="reviews_admin.php" class="nav-item" data-target="reviews">
                     <i class="fas fa-comment-alt"></i> Reviews
                 </a>
-                <a href="#" class="nav-item" data-target="settings">
+                <a href="settings_admin.php" class="nav-item" data-target="settings">
                     <i class="fas fa-cog"></i> Settings
                 </a>
             </nav>
