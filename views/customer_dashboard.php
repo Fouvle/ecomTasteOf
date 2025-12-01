@@ -41,7 +41,7 @@ $stmt = $conn->prepare($list_sql);
 $stmt->bind_param("i", $customer_id);
 $stmt->execute();
 $bookings = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-?>
+
 
 // --- FETCH REVIEWS ---
 $list_sql = "SELECT r.*, v.business_name 
