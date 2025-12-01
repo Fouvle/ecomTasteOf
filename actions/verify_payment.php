@@ -71,8 +71,8 @@ if ($result && $result['status'] === true && $result['data']['status'] === 'succ
         error_log('Verify Payment: Order created - order_id=' . $order_id);
 
         // 4. Create Payment Record
-        $pSql = "INSERT INTO payment (order_id, customer_id, amount, currency, payment_date, payment_method, payment_channel, transaction_ref, payment_status) 
-                 VALUES (?, ?, ?, 'GHS', ?, 'paystack', ?, ?, 'success')";
+        $pSql = "INSERT INTO payment (order_id, customer_id, amt, currency, payment_date, payment_method) 
+                 VALUES (?, ?, ?, 'GHS', ?, ?)";
         $stmt2 = $conn->prepare($pSql);
         
         if (!$stmt2) {
@@ -82,7 +82,7 @@ if ($result && $result['status'] === true && $result['data']['status'] === 'succ
         
         // Date formatting
         $payment_date = date("Y-m-d H:i:s", strtotime($paid_at));
-        $stmt2->bind_param("iidsss", $order_id, $customer_id, $amount, $payment_date, $channel, $reference);
+        $stmt2->bind_param("iidss", $order_id, $customer_id, $amount, $payment_date, $channel);
         
         if (!$stmt2->execute()) {
             error_log('Verify Payment: Execute payment failed - ' . $stmt2->error);
