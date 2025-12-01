@@ -30,7 +30,7 @@ $reviews = get_customer_reviews_ctr($_SESSION['customer_id']);
     </div>
 
     <div class="dashboard-wrapper">
-        <!-- Sidebar (Reused from Customer Dashboard) -->
+        <!-- Sidebar -->
         <aside class="sidebar">
             <nav class="side-nav">
                 <a href="customer_dashboard.php" class="nav-item"><i class="fas fa-th-large"></i> Overview</a>
@@ -64,8 +64,14 @@ $reviews = get_customer_reviews_ctr($_SESSION['customer_id']);
                         <p style="margin:1rem 0; color:#4b5563; line-height:1.5;"><?= htmlspecialchars($r['review_text']) ?></p>
                         
                         <div style="border-top:1px solid #eee; padding-top:1rem; display:flex; gap:1rem;">
-                            <button class="action-btn btn-white" onclick="openEditModal(<?= $r['review_id'] ?>, <?= $r['rating'] ?>, '<?= addslashes($r['review_text']) ?>')"><i class="fas fa-edit"></i> Edit</button>
-                            <button class="action-btn btn-white" style="color:red;" onclick="deleteReview(<?= $r['review_id'] ?>)"><i class="fas fa-trash"></i> Delete</button>
+                            <!-- UPDATED: Only passing ID now -->
+                            <button class="action-btn btn-white" onclick="openEditModal(<?= $r['review_id'] ?>)">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            
+                            <button class="action-btn btn-white" style="color:red;" onclick="deleteReview(<?= $r['review_id'] ?>)">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
                         </div>
                     </div>
                     <?php endforeach; ?>
@@ -97,7 +103,7 @@ $reviews = get_customer_reviews_ctr($_SESSION['customer_id']);
                     <textarea name="review_text" id="edit_text" class="form-control" rows="4"></textarea>
                 </div>
                 <div class="modal-actions">
-                    <button type="button" onclick="document.getElementById('editReviewModal').style.display='none'" class="btn-cancel">Cancel</button>
+                    <button type="button" onclick="closeModal('editReviewModal')" class="btn-cancel">Cancel</button>
                     <button type="submit" class="btn-submit">Update Review</button>
                 </div>
             </form>
