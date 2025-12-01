@@ -62,17 +62,19 @@ $reference = $_GET['reference'] ?? '';
                 method: 'POST',
                 data: JSON.stringify({ reference: ref }),
                 contentType: 'application/json',
+                dataType: 'json',
                 success: function(res) {
                     if(res.status === 'success') {
                         $('#loading').hide();
                         $('#success').show();
                         setTimeout(() => window.location.href = 'customer_dashboard.php', 2500);
                     } else {
-                        showError(res.message);
+                        showError(res.message || 'Payment verification failed');
                     }
                 },
-                error: function() {
-                    showError("Server connection error.");
+                error: function(xhr, status, error) {
+                    console.error('Payment verify error:', status, error, xhr.responseText);
+                    showError('Server connection error. Check console for details.');
                 }
             });
 
