@@ -37,9 +37,9 @@ $(document).ready(function() {
                                     <div class="action-row">
                                         <span style="font-size:0.85rem; color:#ea580c; font-weight:bold;">Verified Vendor <i class="fas fa-check-circle"></i></span>
                                         <!-- Link to single_vendor page. 
-                                             Note: You may need to ensure ../views/single_vendor_page.php handles 'vendor_id' lookups 
+                                             Note: You may need to ensure ../views/single_vendor.php handles 'vendor_id' lookups 
                                              or links via product_id if that is how your system is set up. -->
-                                        <a href="single_vendor_page.php?vendor_id=${vendor.vendor_id}" class="btn btn-outline" style="padding:0.4rem 1rem; font-size:0.85rem;">View Profile</a>
+                                        <a href="single_vendor.php?vendor_id=${vendor.vendor_id}" class="btn btn-outline" style="padding:0.4rem 1rem; font-size:0.85rem;">View Profile</a>
                                     </div>
                                 </div>
                             </div>
