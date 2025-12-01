@@ -56,8 +56,11 @@ $('#paymentForm').submit(function(e) {
                 Swal.fire('Error', res.message, 'error');
             }
         },
-        error: function() {
-            Swal.fire('Error', 'Could not initialize payment.', 'error');
+        error: function(xhr, status, error) {
+            console.error('Payment AJAX Error:', status, error);
+            console.error('Response:', xhr.responseText);
+            console.error('Status Code:', xhr.status);
+            Swal.fire('Error', 'Could not initialize payment. Status: ' + xhr.status + '. Check console.', 'error');
         }
     });
 });

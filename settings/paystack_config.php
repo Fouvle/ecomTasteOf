@@ -27,12 +27,22 @@ function paystack_init($email, $amount, $reference, $callback_url) {
         "Cache-Control: no-cache",
         "Content-Type: application/json"
     ]);
-    curl_setopt($ch,CURLOPT_RETURNTRANSFER, true); 
+    curl_setopt($ch,CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); // For testing only, be careful in production
     
     $result = curl_exec($ch);
+    $curl_error = curl_error($ch);
     curl_close($ch);
     
-    return json_decode($result, true);
+    if ($curl_error) {
+        error_log('Paystack curl error: ' . $curl_error);
+        return ['status' => false, 'message' => 'cURL error: ' . $curl_error];
+    }
+    
+    $decoded = json_decode($result, true);
+    error_log('Paystack response: ' . print_r($decoded, true));
+    
+    return $decoded;
 }
 
 function paystack_verify($reference) {
