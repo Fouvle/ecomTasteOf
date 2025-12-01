@@ -440,7 +440,7 @@
 
                 <div class="btn-group">
                     <button type="button" class="btn btn-prev" onclick="prevStep(4)">Previous</button>
-                    <button type="submit" class="btn btn-next" style="background:#166534; hover:background:#14532d;">Submit Application</button>
+                    <button type="submit" class="btn btn-next" style="background:#166534; hover:background: #14532d;">Submit Application</button>
                 </div>
             </div>
 
