@@ -65,6 +65,7 @@ $('#paymentForm').submit(function(e) {
     });
 });
 
+
     // --- CANCEL LOGIC ---
     window.cancelBooking = function(id) {
         Swal.fire({
