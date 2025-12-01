@@ -7,7 +7,8 @@ ini_set('display_errors', 1);
 require_once "../settings/db_cred.php";
 require_once "../controllers/vendor_controller.php"; // For fetching events
 
-$product_id = $_GET['id'] ?? 0;
+// Accept both 'id' and 'product_id' parameter names for compatibility
+$product_id = $_GET['product_id'] ?? $_GET['id'] ?? 0;
 $vendor_id_param = $_GET['vendor_id'] ?? 0; // Allow direct vendor access too
 
 $vendor = null;
