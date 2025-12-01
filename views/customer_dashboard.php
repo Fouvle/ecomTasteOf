@@ -43,6 +43,19 @@ $stmt->execute();
 $bookings = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 ?>
 
+// --- FETCH REVIEWS ---
+$list_sql = "SELECT r.*, v.business_name 
+             FROM reviews r 
+             JOIN vendors v ON r.vendor_id = v.vendor_id 
+             WHERE r.customer_id = ? 
+             ORDER BY r.created_at DESC";
+$stmt = $conn->prepare($list_sql);
+$stmt->bind_param("i", $customer_id);
+$stmt->execute();
+$reviews = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
