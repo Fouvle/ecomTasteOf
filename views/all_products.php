@@ -277,7 +277,7 @@ $locations = $locResult->fetch_all(MYSQLI_ASSOC);
       <a href="../index.php" class="logo"><span>TC</span> TasteConnect</a>
       <div class="nav-links">
         <a href="../index.php">Home</a>
-        <a href="all_product.php" style="color:var(--primary-orange);">Discover</a>
+        <a href="all_products.php" style="color:var(--primary-orange);">Discover</a>
         <a href="#">Vendors</a>
       </div>
     </div>

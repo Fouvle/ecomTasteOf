@@ -174,7 +174,7 @@ session_start();
       </a>
       <div class="nav-links">
         <a href="index.php" class="active" style="color:#ea580c;">Home</a>
-        <a href="views/all_product.php">Discover</a>
+        <a href="views/all_products.php">Discover</a>
         <a href="views/all_vendors.php">Vendors</a>
         <a href="#">Book Experience</a>
         <a href="#">About Us</a>
@@ -183,7 +183,7 @@ session_start();
 
     <!-- Middle: Search Bar -->
     <div class="nav-search-container">
-        <form action="views/all_product.php" method="get" class="search-wrapper">
+        <form action="views/all_products.php" method="get" class="search-wrapper">
             <i class="fas fa-search"></i>
             <input type="text" name="q" placeholder="Search for restaurants, cuisines...">
         </form>
@@ -259,7 +259,7 @@ session_start();
         <?php endif; ?>
         
         <div style="display:flex; gap:1rem; margin-top:2rem;">
-          <a href="views/all_product.php" class="btn-nav btn-vendor" style="border:none; font-weight:bold;">
+          <a href="views/all_products.php" class="btn-nav btn-vendor" style="border:none; font-weight:bold;">
             Explore Now <i class="fas fa-arrow-right"></i>
           </a>
         </div>

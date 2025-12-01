@@ -210,7 +210,7 @@ require_once $connPath;
             <a href="../index.php" class="logo"><span>TC</span> TasteConnect</a>
             <div class="nav-links">
                 <a href="../index.php">Home</a>
-                <a href="all_product.php">Discover</a>
+                <a href="all_products.php">Discover</a>
                 <a href="all_vendors.php" style="color:var(--primary-orange);">Vendors</a>
             </div>
         </div>

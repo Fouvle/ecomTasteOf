@@ -80,7 +80,7 @@ $bookings = get_customer_bookings_ctr($_SESSION['customer_id']);
                 <i class="fas fa-calendar-times" style="font-size:3rem; color:#d1d5db; margin-bottom:1rem;"></i>
                 <h3>No bookings yet</h3>
                 <p style="color:#6b7280;">Discover amazing vendors and book your first table!</p>
-                <a href="all_product.php" style="display:inline-block; margin-top:1rem; padding:0.8rem 1.5rem; background:var(--primary-orange); color:white; text-decoration:none; border-radius:6px; font-weight:bold;">Find Vendors</a>
+                <a href="all_products.php" style="display:inline-block; margin-top:1rem; padding:0.8rem 1.5rem; background:var(--primary-orange); color:white; text-decoration:none; border-radius:6px; font-weight:bold;">Find Vendors</a>
             </div>
         <?php else: ?>
             <?php foreach ($bookings as $bk): 

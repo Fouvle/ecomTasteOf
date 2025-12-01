@@ -147,7 +147,7 @@ $bookings = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
                         <?php endif; endforeach; ?>
                         
                         <?php if(!$has_upcoming): ?>
-                            <p style="color:gray; padding:1rem; text-align:center;">No upcoming bookings. <a href="../views/all_product.php" style="color:var(--primary-orange);">Explore Vendors</a></p>
+                            <p style="color:gray; padding:1rem; text-align:center;">No upcoming bookings. <a href="../views/all_products.php" style="color:var(--primary-orange);">Explore Vendors</a></p>
                         <?php endif; ?>
                     </div>
                 </div>
@@ -157,7 +157,7 @@ $bookings = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
             <div id="view-bookings" class="view-section">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
                     <h2>Booking History</h2>
-                    <a href="../views/all_product.php" class="action-btn btn-orange">+ New Booking</a>
+                    <a href="../views/all_products.php" class="action-btn btn-orange">+ New Booking</a>
                 </div>
 
                 <table class="data-table">

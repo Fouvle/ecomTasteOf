@@ -133,7 +133,7 @@ if (!$vendor) {
 
 <nav class="navbar">
     <a href="../index.php" class="logo"><span>TC</span> TasteConnect</a>
-    <a href="all_product.php" style="color:var(--gray-text); text-decoration:none; font-weight:500;">Back to Discover</a>
+    <a href="all_products.php" style="color:var(--gray-text); text-decoration:none; font-weight:500;">Back to Discover</a>
 </nav>
 
 <div class="booking-container">

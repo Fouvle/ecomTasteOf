@@ -65,13 +65,13 @@ $vendorEvents = get_vendor_events_ctr($vendor['vendor_id']);
     <nav class="navbar">
         <a href="../index.php" class="logo"><span>TC</span> TasteConnect</a>
         <div class="nav-links">
-            <a href="all_product.php">Discover</a>
+            <a href="all_products.php">Discover</a>
             <a href="all_vendors.php">Vendors</a>
         </div>
     </nav>
 
     <div class="container" style="margin-top:2rem;">
-        <a href="all_product.php" style="color:var(--gray-text);"><i class="fas fa-arrow-left"></i> Back</a>
+        <a href="all_products.php" style="color:var(--gray-text);"><i class="fas fa-arrow-left"></i> Back</a>
 
         <!-- Header -->
         <div class="vendor-header" style="margin-top:1rem; border-radius:12px; border:1px solid #e5e7eb;">
