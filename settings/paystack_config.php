@@ -1,7 +1,7 @@
 <?php
 // API Keys (Test Keys from your uploaded file)
-define('PAYSTACK_SECRET_KEY', 'sk_test_e8d5eef29c47b0e87880e5f8faa20a5c4999d160'); 
-define('PAYSTACK_PUBLIC_KEY', 'pk_test_f7f851907f26ea0cec49b13286eb4dd6da13ef14');
+define('PAYSTACK_SECRET_KEY', 'sk_test_d8197eed588728fe89a884be7f9932f47b66c425'); 
+define('PAYSTACK_PUBLIC_KEY', 'pk_test_f5348ad1cc2199479ca67ec0da4f9501f62db8fd');
 
 // Endpoints
 define('PAYSTACK_INIT_URL', 'https://api.paystack.co/transaction/initialize');
