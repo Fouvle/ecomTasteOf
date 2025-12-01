@@ -1,5 +1,5 @@
 <?php
-require_once dirname(__FILE__) . '/../settings/connection.php';
+require_once dirname(__FILE__) . '/../settings/db_cred.php';
 
 // 1. Add Review
 function add_review_ctr($customer_id, $vendor_id, $booking_id, $rating, $review_text) {
