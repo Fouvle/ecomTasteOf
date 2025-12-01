@@ -16,31 +16,51 @@ $(document).ready(function() {
     window.openModal = function(id) { document.getElementById(id).style.display = 'block'; }
 
     // --- PAYMENT LOGIC ---
-    window.openPaymentModal = function(bookingId, vendorName, amount) {
-        $('#payBookingId').val(bookingId);
-        $('#payVendor').text(vendorName);
-        $('#payAmount').text('₵' + amount);
-        openModal('paymentModal');
-    }
+   
+// Open Modal (Optional: You can skip modal and go straight to pay if preferred)
+window.openPaymentModal = function(bookingId, vendorName, amount) {
+    // We can use the existing modal but change the form action
+    $('#payBookingId').val(bookingId);
+    $('#payVendor').text(vendorName);
+    $('#payAmount').text('₵' + amount);
+    // Store exact amount for the API call
+    $('#paymentForm').data('amount', amount);
+    openModal('paymentModal');
+}
 
-    $('#paymentForm').submit(function(e) {
-        e.preventDefault();
-        const data = $(this).serialize();
-        
-        Swal.fire({
-            title: 'Processing Payment...',
-            text: 'Please check your phone for the prompt.',
-            didOpen: () => Swal.showLoading()
-        });
+$('#paymentForm').submit(function(e) {
+    e.preventDefault();
+    
+    const bookingId = $('#payBookingId').val();
+    const amount = $(this).data('amount');
 
-        $.post('../actions/manage_booking_action.php', data, function(res) {
+    Swal.fire({
+        title: 'Initiating Payment...',
+        text: 'Connecting to Paystack Secure Gateway',
+        allowOutsideClick: false,
+        didOpen: () => Swal.showLoading()
+    });
+
+    // Call Initialize Action
+    $.ajax({
+        url: '../actions/initialize_payment.php',
+        type: 'POST',
+        data: JSON.stringify({ booking_id: bookingId, amount: amount }),
+        contentType: 'application/json',
+        dataType: 'json',
+        success: function(res) {
             if(res.status === 'success') {
-                Swal.fire('Paid!', 'Booking confirmed.', 'success').then(() => location.reload());
+                // Redirect to Paystack
+                window.location.href = res.authorization_url;
             } else {
                 Swal.fire('Error', res.message, 'error');
             }
-        }, 'json');
+        },
+        error: function() {
+            Swal.fire('Error', 'Could not initialize payment.', 'error');
+        }
     });
+});
 
     // --- CANCEL LOGIC ---
     window.cancelBooking = function(id) {
