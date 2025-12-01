@@ -70,7 +70,7 @@ function mark_booking_paid_ctr($booking_id) {
     if($stmt->execute()) {
         // Create Payment Record
         $order_id = $stmt->insert_id;
-        $amt = 50.00; // Placeholder amount
+        $amt = 50.00; // Placeholder amt
         $pSql = "INSERT INTO payment (order_id, customer_id, amt, payment_method, payment_date) 
                  VALUES (?, ?, ?, 'card', NOW())";
         $pStmt = $conn->prepare($pSql);

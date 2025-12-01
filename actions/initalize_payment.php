@@ -12,9 +12,9 @@ if (!isset($_SESSION['customer_id'])) {
 
 $input = json_decode(file_get_contents('php://input'), true);
 $booking_id = $input['booking_id'] ?? 0;
-$amount = $input['amount'] ?? 0;
+$amt = $input['amt'] ?? 0;
 
-if (!$booking_id || !$amount) {
+if (!$booking_id || !$amt) {
     echo json_encode(['status' => 'error', 'message' => 'Invalid booking details.']);
     exit();
 }
@@ -36,7 +36,7 @@ $callback_url = "http://169.239.251.102:442/~nana.nkrumah/views/payment_callback
 
 // 4. Initialize Paystack
 try {
-    $response = paystack_init($email, $amount, $reference, $callback_url);
+    $response = paystack_init($email, $amt, $reference, $callback_url);
 
     if ($response['status']) {
         // Save temp reference in session for security check later

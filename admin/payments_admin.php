@@ -56,7 +56,7 @@ $payments = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
                     <tr>
                         <th>Date</th>
                         <th>Customer</th>
-                        <th>Amount</th>
+                        <th>amt</th>
                         <th>Method</th>
                         <th>Reference</th>
                     </tr>
