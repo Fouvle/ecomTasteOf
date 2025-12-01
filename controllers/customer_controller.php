@@ -17,3 +17,4 @@ function register_customer_ctr($name, $email, $password, $country, $city, $phone
     $hashed_password = password_hash($password, PASSWORD_DEFAULT); // Hash the password
     return $customer->registerUser($name, $email, $hashed_password, $country, $city, $phone_number, $role);
 }
+

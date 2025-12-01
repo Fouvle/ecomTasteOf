@@ -39,11 +39,14 @@ $(document).ready(function () {
                     });
                 }
             },
-            error: function () {
+            error: function (xhr, status, error) {
+                console.error('AJAX Error:', status, error);
+                console.error('Response Text:', xhr.responseText);
+                console.error('Status Code:', xhr.status);
                 Swal.fire({
                     icon: 'error',
                     title: 'System Error',
-                    text: 'Could not connect to the server.',
+                    text: 'Could not connect to the server. Status: ' + xhr.status,
                     confirmButtonColor: '#ea580c'
                 });
             }

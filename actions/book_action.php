@@ -1,6 +1,8 @@
 <?php
 // actions/book_action.php
 session_start();
+error_reporting(E_ALL);
+ini_set('display_errors', 0); // Don't display errors to client, log them instead
 require_once "../controllers/booking_controller.php";
 
 header('Content-Type: application/json');
@@ -29,12 +31,17 @@ if (isset($_POST['vendor_id'], $_POST['date'], $_POST['time'], $_POST['people'])
     }
 
     // 3. Create Booking
-    $result = create_booking_ctr($customer_id, $vendor_id, $datetime, $people);
-
-    if ($result) {
-        echo json_encode(['status' => 'success', 'message' => 'Booking request sent successfully!']);
-    } else {
-        echo json_encode(['status' => 'error', 'message' => 'Failed to place booking. Please try again.']);
+    try {
+        $result = create_booking_ctr($customer_id, $vendor_id, $datetime, $people);
+        if ($result) {
+            echo json_encode(['status' => 'success', 'message' => 'Booking request sent successfully!']);
+        } else {
+            error_log('Booking creation failed for customer ' . $customer_id);
+            echo json_encode(['status' => 'error', 'message' => 'Failed to place booking. Please try again.']);
+        }
+    } catch (Exception $e) {
+        error_log('Booking error: ' . $e->getMessage());
+        echo json_encode(['status' => 'error', 'message' => 'System error: ' . $e->getMessage()]);
     }
 
 } else {

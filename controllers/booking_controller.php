@@ -1,7 +1,29 @@
 <?php
 require_once dirname(__FILE__) . '/../settings/db_cred.php';
 
-// ... (Keep existing functions: create_booking_ctr, get_customer_bookings_ctr, etc.) ...
+// Create a new booking
+function create_booking_ctr($customer_id, $vendor_id, $datetime, $number_of_people) {
+    global $conn;
+    
+    $sql = "INSERT INTO bookings (customer_id, vendor_id, booking_datetime, number_of_people, booking_status) 
+            VALUES (?, ?, ?, ?, 'pending')";
+    $stmt = $conn->prepare($sql);
+    
+    if (!$stmt) {
+        error_log('Prepare failed: ' . $conn->error);
+        return false;
+    }
+    
+    $stmt->bind_param('iisi', $customer_id, $vendor_id, $datetime, $number_of_people);
+    
+    if (!$stmt->execute()) {
+        error_log('Execute failed: ' . $stmt->error);
+        return false;
+    }
+    
+    $stmt->close();
+    return true;
+}
 
 // 1. Get Single Booking Details (For Modal)
 function get_booking_details_ctr($booking_id) {
