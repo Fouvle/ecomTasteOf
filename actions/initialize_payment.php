@@ -16,10 +16,10 @@ if (!isset($_SESSION['customer_id'])) {
 
 $input = json_decode(file_get_contents('php://input'), true);
 $booking_id = $input['booking_id'] ?? 0;
-$amt = $input['amt'] ?? 0;
+$amount = $input['amount'] ?? 0;
 
-if (!$booking_id || !$amt) {
-    error_log('Payment init: Invalid booking_id=' . $booking_id . ', amt=' . $amt);
+if (!$booking_id || !$amount) {
+    error_log('Payment init: Invalid booking_id=' . $booking_id . ', amount=' . $amount);
     echo json_encode(['status' => 'error', 'message' => 'Invalid booking details.']);
     exit();
 }
@@ -61,7 +61,7 @@ try {
         exit();
     }
 
-    $response = paystack_init($email, $amt, $reference, $callback_url);
+    $response = paystack_init($email, $amount, $reference, $callback_url);
 
     if ($response['status']) {
         // Save temp reference in session for security check later

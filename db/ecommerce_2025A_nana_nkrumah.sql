@@ -164,7 +164,7 @@ CREATE TABLE payment (
   pay_id INT(11) NOT NULL AUTO_INCREMENT,
   order_id INT(11) NOT NULL,
   customer_id INT(11) NOT NULL,
-  amt DOUBLE NOT NULL,
+  amount DOUBLE NOT NULL,
   payment_method ENUM('mtn_momo','telecel_cash','at_money','card') NOT NULL,
   currency VARCHAR(10) NOT NULL DEFAULT 'GHS',
   payment_date DATETIME NOT NULL,

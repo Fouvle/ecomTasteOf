@@ -47,7 +47,7 @@ $payments = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
             <h2>Financial Overview</h2>
             <div class="stat-card" style="margin-bottom:2rem; width:300px;">
                 <div class="stat-label">Total Earnings</div>
-                <div class="stat-value">₵<?= number_format(array_sum(array_column($payments, 'amt')), 2) ?></div>
+                <div class="stat-value">₵<?= number_format(array_sum(array_column($payments, 'amount')), 2) ?></div>
             </div>
 
             <h3>Transaction History</h3>
@@ -56,7 +56,7 @@ $payments = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
                     <tr>
                         <th>Date</th>
                         <th>Customer</th>
-                        <th>amt</th>
+                        <th>amount</th>
                         <th>Method</th>
                         <th>Reference</th>
                     </tr>
@@ -66,7 +66,7 @@ $payments = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
                     <tr>
                         <td><?= date('M d, Y', strtotime($pay['payment_date'])) ?></td>
                         <td><?= htmlspecialchars($pay['customer_name']) ?></td>
-                        <td style="color:#166534; font-weight:bold;">+₵<?= $pay['amt'] ?></td>
+                        <td style="color:#166534; font-weight:bold;">+₵<?= $pay['amount'] ?></td>
                         <td><?= strtoupper(str_replace('_', ' ', $pay['payment_method'])) ?></td>
                         <td>#<?= $pay['pay_id'] ?></td>
                     </tr>

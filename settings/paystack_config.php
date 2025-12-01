@@ -8,11 +8,11 @@ define('PAYSTACK_INIT_URL', 'https://api.paystack.co/transaction/initialize');
 define('PAYSTACK_VERIFY_URL', 'https://api.paystack.co/transaction/verify/');
 
 // Helpers
-function paystack_init($email, $amt, $reference, $callback_url) {
+function paystack_init($email, $amount, $reference, $callback_url) {
     $url = PAYSTACK_INIT_URL;
     $fields = [
         'email' => $email,
-        'amt' => $amt * 100, // Convert to pesewas
+        'amount' => $amount * 100, // Convert to pesewas
         'reference' => $reference,
         'callback_url' => $callback_url,
         'currency' => 'GHS'

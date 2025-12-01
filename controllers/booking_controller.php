@@ -70,11 +70,11 @@ function mark_booking_paid_ctr($booking_id) {
     if($stmt->execute()) {
         // Create Payment Record
         $order_id = $stmt->insert_id;
-        $amt = 50.00; // Placeholder amt
-        $pSql = "INSERT INTO payment (order_id, customer_id, amt, payment_method, payment_date) 
+        $amount = 50.00; // Placeholder amount
+        $pSql = "INSERT INTO payment (order_id, customer_id, amount, payment_method, payment_date) 
                  VALUES (?, ?, ?, 'card', NOW())";
         $pStmt = $conn->prepare($pSql);
-        $pStmt->bind_param("iid", $order_id, $bk['customer_id'], $amt);
+        $pStmt->bind_param("iid", $order_id, $bk['customer_id'], $amount);
         $pStmt->execute();
         
         // Update Booking Status to Confirmed

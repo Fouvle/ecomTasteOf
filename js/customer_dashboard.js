@@ -18,13 +18,13 @@ $(document).ready(function() {
     // --- PAYMENT LOGIC ---
    
 // Open Modal (Optional: You can skip modal and go straight to pay if preferred)
-window.openPaymentModal = function(bookingId, vendorName, amt) {
+window.openPaymentModal = function(bookingId, vendorName, amount) {
     // We can use the existing modal but change the form action
     $('#payBookingId').val(bookingId);
     $('#payVendor').text(vendorName);
-    $('#payamt').text('₵' + amt);
-    // Store exact amt for the API call
-    $('#paymentForm').data('amt', amt);
+    $('#payamount').text('₵' + amount);
+    // Store exact amount for the API call
+    $('#paymentForm').data('amount', amount);
     openModal('paymentModal');
 }
 
@@ -32,7 +32,7 @@ $('#paymentForm').submit(function(e) {
     e.preventDefault();
     
     const bookingId = $('#payBookingId').val();
-    const amt = $(this).data('amt');
+    const amount = $(this).data('amount');
 
     Swal.fire({
         title: 'Initiating Payment...',
@@ -45,7 +45,7 @@ $('#paymentForm').submit(function(e) {
     $.ajax({
         url: '../actions/initialize_payment.php',
         type: 'POST',
-        data: JSON.stringify({ booking_id: bookingId, amt: amt }),
+        data: JSON.stringify({ booking_id: bookingId, amount: amount }),
         contentType: 'application/json',
         dataType: 'json',
         success: function(res) {

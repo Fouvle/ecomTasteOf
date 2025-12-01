@@ -19,7 +19,7 @@ $result = paystack_verify($reference);
 if ($result['status'] && $result['data']['status'] === 'success') {
     
     // Payment is valid! Extract details
-    $amt = $result['data']['amt'] / 100; // Convert back to GHS
+    $amount = $result['data']['amount'] / 100; // Convert back to GHS
     $channel = $result['data']['channel'];
     $paid_at = $result['data']['paid_at']; // ISO Date
     
@@ -48,12 +48,12 @@ if ($result['status'] && $result['data']['status'] === 'success') {
         $order_id = $stmt1->insert_id;
 
         // 4. Create Payment Record
-        $pSql = "INSERT INTO payment (order_id, customer_id, amt, currency, payment_date, payment_method, payment_channel, transaction_ref, payment_status) 
+        $pSql = "INSERT INTO payment (order_id, customer_id, amount, currency, payment_date, payment_method, payment_channel, transaction_ref, payment_status) 
                  VALUES (?, ?, ?, 'GHS', ?, 'paystack', ?, ?, 'success')";
         $stmt2 = $conn->prepare($pSql);
         // Date formatting
         $payment_date = date("Y-m-d H:i:s", strtotime($paid_at));
-        $stmt2->bind_param("iidsss", $order_id, $customer_id, $amt, $payment_date, $channel, $reference);
+        $stmt2->bind_param("iidsss", $order_id, $customer_id, $amount, $payment_date, $channel, $reference);
         $stmt2->execute();
 
         // 5. Update Booking Status to Confirmed (Approved)
