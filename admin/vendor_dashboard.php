@@ -301,6 +301,6 @@ $recent_bookings = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
         </div>
     </div>
 
-    <script src="../js/vendor_dashboard_new.js"></script>
+    <script src="../js/vendor_dashboard.js"></script>
 </body>
 </html>
