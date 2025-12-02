@@ -35,9 +35,7 @@ $stmt->bind_param("i", $vendor_id);
 $stmt->execute();
 $menu_stats = $stmt->get_result()->fetch_assoc();
 
-// 4. Revenue (Sum of payments linked to this vendor's bookings/events)
-// Note: This assumes payments are linked via orders. If no data, defaults to 0.
-$rev_sql = "SELECT SUM(p.amount) as total_revenue 
+$rev_sql = "SELECT SUM(p.amt) as total_revenue 
             FROM payment p
             JOIN orders o ON p.order_id = o.order_id
             LEFT JOIN bookings b ON o.booking_id = b.booking_id
