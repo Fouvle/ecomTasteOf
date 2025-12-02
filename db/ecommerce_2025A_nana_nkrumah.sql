@@ -219,7 +219,7 @@ CREATE TABLE `products` (
   `product_title` varchar(200) NOT NULL,
   `product_price` double NOT NULL,
   `product_desc` varchar(500) DEFAULT NULL,
-  `product_image` varchar(100) DEFAULT NULL,
+  `product_image` varchar(255) DEFAULT NULL,
   `product_keywords` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -228,15 +228,15 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`product_id`, `vendor_id`, `product_cat`, `product_brand`, `product_title`, `product_price`, `product_desc`, `product_image`, `product_keywords`) VALUES
-(1, 1, 1, 1, 'Signature Waakye', 45, 'Rice and beans cooked with millet leaves, served with spaghetti, gari, boiled eggs, and wele.', 'uploads/products/waakye.jpg', 'waakye, rice, beans, traditional'),
-(2, 1, 1, 1, 'Fufu & Light Soup', 60, 'Smooth pounded cassava and plantain served with spicy goat meat light soup.', 'uploads/products/fufu.jpg', 'fufu, soup, goat, traditional'),
-(3, 1, 1, 1, 'Red Red (Gob3)', 35, 'Fried plantains with savory black-eyed pea stew, topped with gari and palm oil.', 'uploads/products/redred.jpg', 'beans, plantain, red red, gob3'),
-(4, 2, 1, 3, 'Assorted Jollof Rice', 85, 'Smoky Ghana jollof rice served with grilled chicken, beef strips, and sausages.', 'uploads/products/jollof_assorted.jpg', 'jollof, rice, spicy, meat'),
-(5, 2, 3, 3, 'Grilled Tilapia & Banku', 75, 'Fresh grilled tilapia marinated in spices, served with soft fermented corn dough.', 'uploads/products/tilapia.jpg', 'fish, tilapia, banku, grilled'),
-(6, 2, 3, 3, 'Fried Rice & Chicken', 50, 'Classic fried rice with veggies and crispy fried chicken thigh.', 'uploads/products/fried_rice.jpg', 'fried rice, chicken, continental'),
-(7, 3, 2, 2, 'Spicy Kelewele', 25, 'Ripe plantain cubes seasoned with ginger, onions, and chili, fried to perfection.', 'uploads/products/kelewele.jpg', 'plantain, spicy, snack, street food'),
-(8, 3, 2, 2, 'Suya Beef Khebabs', 15, 'Thinly sliced beef skewers coated in spicy peanut powder and grilled.', 'uploads/products/khebab.jpg', 'beef, meat, spicy, khebab, suya'),
-(9, 3, 4, 4, 'Sobolo (Bissap)', 10, 'Chilled hibiscus tea infused with ginger and pineapple.', 'uploads/products/sobolo.jpg', 'drink, juice, sobolo, hibiscus');
+(1, 1, 1, 1, 'Signature Waakye', 45, 'Rice and beans cooked with millet leaves, served with spaghetti, gari, boiled eggs, and wele.', 'uploads/signature waakye.jpg', 'waakye, rice, beans, traditional'),
+(2, 1, 1, 1, 'Fufu & Light Soup', 60, 'Smooth pounded cassava and plantain served with spicy goat meat light soup.', 'uploads/fufu and light soup.jpg', 'fufu, soup, goat, traditional'),
+(3, 1, 1, 1, 'Red Red (Gob3)', 35, 'Fried plantains with savory black-eyed pea stew, topped with gari and palm oil.', 'uploads/red red.jpg', 'beans, plantain, red red, gob3'),
+(4, 2, 1, 3, 'Assorted Jollof Rice', 85, 'Smoky Ghana jollof rice served with grilled chicken, beef strips, and sausages.', 'uploads/assorted jollof.jpg', 'jollof, rice, spicy, meat'),
+(5, 2, 3, 3, 'Grilled Tilapia & Banku', 75, 'Fresh grilled tilapia marinated in spices, served with soft fermented corn dough.', 'uploads/grilled tilapia with banku.jpg', 'fish, tilapia, banku, grilled'),
+(6, 2, 3, 3, 'Fried Rice & Chicken', 50, 'Classic fried rice with veggies and crispy fried chicken thigh.', 'uploads/fried rice and chicken.jpg', 'fried rice, chicken, continental'),
+(7, 3, 2, 2, 'Spicy Kelewele', 25, 'Ripe plantain cubes seasoned with ginger, onions, and chili, fried to perfection.', 'uploads/spicy kelewele.jpg', 'plantain, spicy, snack, street food'),
+(8, 3, 2, 2, 'Suya Beef Khebabs', 15, 'Thinly sliced beef skewers coated in spicy peanut powder and grilled.', 'uploads/suya beef kebab.jpg', 'beef, meat, spicy, khebab, suya'),
+(9, 3, 4, 4, 'Sobolo (Bissap)', 10, 'Chilled hibiscus tea infused with ginger and pineapple.', 'uploads/sobolo.jpg', 'drink, juice, sobolo, hibiscus');
 
 -- --------------------------------------------------------
 
