@@ -87,4 +87,18 @@ function mark_booking_paid_ctr($booking_id) {
     }
     return false;
 }
+
+// 4. Get Customer's Bookings
+function get_customer_bookings_ctr($customer_id) {
+    global $conn;
+    $sql = "SELECT b.booking_id, b.booking_datetime, b.number_of_people, b.booking_status, v.business_name
+            FROM bookings b
+            JOIN vendors v ON b.vendor_id = v.vendor_id
+            WHERE b.customer_id = ?
+            ORDER BY b.booking_datetime DESC";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $customer_id);
+    $stmt->execute();
+    return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+}
 ?>
