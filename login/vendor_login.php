@@ -149,7 +149,7 @@
             <div class="alert alert-success"><?= htmlspecialchars($_GET['success']) ?></div>
         <?php endif; ?>
 
-        <form action="../actions/vendor_login_action.php" method="POST">
+        <form action="../actions/login_vendor_action.php" method="POST">
             <div class="form-group">
                 <label>Business Email</label>
                 <input type="email" name="email" class="form-control" placeholder="owner@business.com" required>
