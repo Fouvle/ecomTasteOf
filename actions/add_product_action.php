@@ -6,101 +6,97 @@ header('Content-Type: application/json');
 
 // Ensure vendor is logged in
 if (!isset($_SESSION['vendor_id'])) {
-    http_response_code(401);
     echo json_encode(['status' => 'error', 'message' => 'Unauthorized.']);
     exit;
 }
 
 $vendor_id = (int) $_SESSION['vendor_id'];
+$action = $_POST['action'] ?? 'add';
 
-// Accept POST only
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    http_response_code(405);
-    echo json_encode(['status' => 'error', 'message' => 'Method not allowed.']);
-    exit;
-}
-
+// Validate Basic Inputs
 $title = trim($_POST['productTitle'] ?? '');
 $price = $_POST['productPrice'] ?? '';
 $cat = $_POST['productCategory'] ?? '';
 $brand = $_POST['productBrand'] ?? '';
 $desc = trim($_POST['productDescription'] ?? '');
 
-$errors = [];
-if ($title === '') { $errors[] = 'Product name is required.'; }
-if ($price === '' || !is_numeric($price) || $price < 0) { $errors[] = 'Valid product price is required.'; }
-if ($cat === '' || !is_numeric($cat)) { $errors[] = 'Product category is required.'; }
-if ($brand === '' || !is_numeric($brand)) { $errors[] = 'Product brand is required.'; }
+if ($title === '' || $price === '' || $cat === '' || $brand === '') {
+    echo json_encode(['status' => 'error', 'message' => 'Please fill in all required fields.']);
+    exit;
+}
 
-// Handle image upload (optional)
+// Handle Image Upload
 $image_path = null;
 if (!empty($_FILES['productImage']) && $_FILES['productImage']['error'] !== UPLOAD_ERR_NO_FILE) {
     $file = $_FILES['productImage'];
-    if ($file['error'] !== UPLOAD_ERR_OK) {
-        $errors[] = 'Error uploading image.';
-    } else {
-        $allowed = ['image/jpeg','image/png','image/webp','image/gif'];
-        $finfo = finfo_open(FILEINFO_MIME_TYPE);
-        $mime = finfo_file($finfo, $file['tmp_name']);
-        finfo_close($finfo);
-        if (!in_array($mime, $allowed)) {
-            $errors[] = 'Invalid image type. Allowed: JPG, PNG, WEBP, GIF.';
-        } elseif ($file['size'] > 3 * 1024 * 1024) {
-            $errors[] = 'Image too large (max 3MB).';
-        } else {
-            $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
-            $uploadsDir = __DIR__ . '/../uploads/products';
-            if (!is_dir($uploadsDir)) { mkdir($uploadsDir, 0755, true); }
-            $safeName = time() . '_' . bin2hex(random_bytes(6)) . '.' . $ext;
-            $dest = $uploadsDir . '/' . $safeName;
-            if (!move_uploaded_file($file['tmp_name'], $dest)) {
-                $errors[] = 'Failed to move uploaded image.';
-            } else {
-                // store relative path for DB
-                $image_path = 'uploads/products/' . $safeName;
-            }
-        }
+    $allowed = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg'];
+    
+    // Validate Type
+    $finfo = finfo_open(FILEINFO_MIME_TYPE);
+    $mime = finfo_file($finfo, $file['tmp_name']);
+    finfo_close($finfo);
+    
+    if (!in_array($mime, $allowed)) {
+        echo json_encode(['status' => 'error', 'message' => 'Invalid image format.']);
+        exit;
+    }
+
+    // Upload
+    $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
+    $dir = __DIR__ . '/../uploads/products/';
+    if (!is_dir($dir)) mkdir($dir, 0777, true);
+    
+    $fileName = time() . '_' . uniqid() . '.' . $ext;
+    if (move_uploaded_file($file['tmp_name'], $dir . $fileName)) {
+        $image_path = 'uploads/products/' . $fileName;
     }
 }
 
-if (!empty($errors)) {
-    http_response_code(400);
-    echo json_encode(['status' => 'error', 'message' => implode(' ', $errors)]);
-    exit;
+// --- ADD LOGIC ---
+if ($action === 'add') {
+    $sql = "INSERT INTO products (vendor_id, product_cat, product_brand, product_title, product_price, product_desc, product_image) 
+            VALUES (?, ?, ?, ?, ?, ?, ?)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('iiisdss', $vendor_id, $cat, $brand, $title, $price, $desc, $image_path);
+    
+    if ($stmt->execute()) {
+        echo json_encode(['status' => 'success', 'message' => 'Product added successfully.']);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Database error: ' . $stmt->error]);
+    }
+} 
+// --- EDIT LOGIC ---
+elseif ($action === 'edit') {
+    $product_id = $_POST['product_id'] ?? 0;
+    
+    // Verify Ownership
+    $check = $conn->prepare("SELECT product_image FROM products WHERE product_id = ? AND vendor_id = ?");
+    $check->bind_param("ii", $product_id, $vendor_id);
+    $check->execute();
+    $res = $check->get_result()->fetch_assoc();
+    
+    if (!$res) {
+        echo json_encode(['status' => 'error', 'message' => 'Product not found or unauthorized.']);
+        exit;
+    }
+    
+    // Keep old image if no new one uploaded
+    if (!$image_path) {
+        $image_path = $res['product_image'];
+    } else {
+        // Optional: Delete old image file here if you want to save space
+        // if($res['product_image'] && file_exists("../".$res['product_image'])) unlink("../".$res['product_image']);
+    }
+
+    $sql = "UPDATE products SET product_cat=?, product_brand=?, product_title=?, product_price=?, product_desc=?, product_image=? 
+            WHERE product_id=? AND vendor_id=?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("iisdssii", $cat, $brand, $title, $price, $desc, $image_path, $product_id, $vendor_id);
+    
+    if ($stmt->execute()) {
+        echo json_encode(['status' => 'success', 'message' => 'Product updated successfully.']);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Update failed.']);
+    }
 }
-
-// Insert product
-$sql = "INSERT INTO products (vendor_id, product_cat, product_brand, product_title, product_price, product_desc, product_image) VALUES (?, ?, ?, ?, ?, ?, ?)";
-$stmt = $conn->prepare($sql);
-if (!$stmt) {
-    http_response_code(500);
-    error_log('Add product prepare failed: ' . $conn->error);
-    echo json_encode(['status' => 'error', 'message' => 'Server error.']);
-    exit;
-}
-
-$price_val = (float) $price;
-$img_val = $image_path ?? null;
-$stmt->bind_param('iiisdss', $vendor_id, $cat, $brand, $title, $price_val, $desc, $img_val);
-
-if (!$stmt->execute()) {
-    http_response_code(500);
-    error_log('Add product execute failed: ' . $stmt->error);
-    echo json_encode(['status' => 'error', 'message' => 'Failed to add product.']);
-    exit;
-}
-
-$new_id = $stmt->insert_id;
-$stmt->close();
-
-$isAjax = !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
-if ($isAjax) {
-    echo json_encode(['status' => 'success', 'message' => 'Product added.', 'product_id' => $new_id]);
-    exit;
-}
-
-// Fallback: redirect back to vendor dashboard
-header('Location: ../admin/vendor_dashboard.php?added=1');
-exit;
-
 ?>
