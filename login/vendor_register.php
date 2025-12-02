@@ -187,7 +187,7 @@
         <a href="../index.php" class="logo">TC TasteConnect</a>
         <div>
             <span style="margin-right:1rem; color:var(--gray-text); display:none; @media(min-width:600px){display:inline;}">Already selling?</span>
-            <a href="login.php" class="nav-btn btn-login">Login</a>
+            <a href="login/vendor_login.php" class="nav-btn btn-login">Login</a>
         </div>
     </nav>
 
