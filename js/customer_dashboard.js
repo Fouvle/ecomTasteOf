@@ -64,7 +64,7 @@ $(document).ready(function() {
     }
 
     // Expose to global scope so other ready handlers can call it
-    window.loadReviews = loadReviews;
+    // window.loadReviews = loadReviews;
 
     // Small helper to escape text when inserting into HTML
     function escapeHtml(unsafe) {

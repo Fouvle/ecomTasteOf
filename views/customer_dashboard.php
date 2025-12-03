@@ -210,7 +210,7 @@ $reviews = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
             <!-- REVIEWS TAB -->
             <div id="view-reviews" class="view-section">
-                <h2>My Reviews</h2>
+                <h2><a href = "my_reviews.php">My Reviews</a></h2>
                 <div id="reviews-container">
                     <!-- Loaded via JS or simple PHP loop if separate table exists -->
                     <p style="color:gray;">You haven't written any reviews yet.</p>
