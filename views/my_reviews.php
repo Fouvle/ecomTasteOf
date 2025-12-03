@@ -33,9 +33,9 @@ $reviews = get_customer_reviews_ctr($_SESSION['customer_id']);
         <!-- Sidebar -->
         <aside class="sidebar">
             <nav class="side-nav">
-                <a href="views/customer_dashboard.php" class="nav-item"><i class="fas fa-th-large"></i> Overview</a>
-                <a href="views/my_bookings.php" class="nav-item"><i class="fas fa-calendar-alt"></i> My Bookings</a>
-                <a href="views/my_reviews.php" class="nav-item active"><i class="fas fa-star"></i> My Reviews</a>
+                <a href="customer_dashboard.php" class="nav-item"><i class="fas fa-th-large"></i> Overview</a>
+                <a href="my_bookings.php" class="nav-item"><i class="fas fa-calendar-alt"></i> My Bookings</a>
+                <a href="my_reviews.php" class="nav-item active"><i class="fas fa-star"></i> My Reviews</a>
                 <a href="#" class="nav-item"><i class="fas fa-cog"></i> Settings</a>
             </nav>
         </aside>
