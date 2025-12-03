@@ -63,6 +63,9 @@ $(document).ready(function() {
         });
     }
 
+    // Expose to global scope so other ready handlers can call it
+    window.loadReviews = loadReviews;
+
     // Small helper to escape text when inserting into HTML
     function escapeHtml(unsafe) {
         if (!unsafe && unsafe !== 0) return '';
