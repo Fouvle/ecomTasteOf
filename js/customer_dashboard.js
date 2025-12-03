@@ -19,6 +19,61 @@ $(document).ready(function() {
         $('#view-' + target).addClass('active');
     });
 
+    // Load reviews when user opens the reviews tab
+    let reviewsLoaded = false;
+    function loadReviews() {
+        if (reviewsLoaded) return;
+        $('#reviews-container').html('<i class="fas fa-spinner fa-spin"></i> Loading reviews...');
+        $.get('../actions/get_review.php', function(res) {
+            if (res.status === 'success') {
+                const reviews = res.data;
+                if (!reviews || reviews.length === 0) {
+                    $('#reviews-container').html('<p style="color:gray;">You haven\'t written any reviews yet.</p>');
+                    reviewsLoaded = true;
+                    return;
+                }
+
+                let out = '';
+                reviews.forEach(r => {
+                    const created = new Date(r.created_at);
+                    const dateStr = created.toLocaleString();
+                    // Build star rating
+                    let stars = '';
+                    for (let i=1;i<=5;i++) stars += (i <= parseInt(r.rating) ? '★' : '☆');
+
+                    out += `
+                        <div class="review-item" style="border:1px solid #e5e7eb;padding:1rem;border-radius:8px;margin-bottom:0.75rem;">
+                            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.4rem;">
+                                <div style="font-weight:600;">${escapeHtml(r.business_name || 'Vendor')}</div>
+                                <div style="color:#f59e0b;letter-spacing:1px;">${stars}</div>
+                            </div>
+                            <div style="color:#6b7280;font-size:0.9rem;margin-bottom:0.5rem;">${escapeHtml(r.review_text || '')}</div>
+                            <div style="font-size:0.8rem;color:#9ca3af;">${dateStr}</div>
+                        </div>
+                    `;
+                });
+
+                $('#reviews-container').html(out);
+                reviewsLoaded = true;
+            } else {
+                $('#reviews-container').html('<p style="color:red;">Could not load reviews.</p>');
+            }
+        }, 'json').fail(function() {
+            $('#reviews-container').html('<p style="color:red;">Request failed while fetching reviews.</p>');
+        });
+    }
+
+    // Small helper to escape text when inserting into HTML
+    function escapeHtml(unsafe) {
+        if (!unsafe && unsafe !== 0) return '';
+        return String(unsafe)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+    }
+
     // Helper: Modal Controls
     window.closeModal = function(id) { document.getElementById(id).style.display = 'none'; }
     window.openModal = function(id) { document.getElementById(id).style.display = 'block'; }
@@ -30,7 +85,7 @@ window.openPaymentModal = function(bookingId, vendorName, amount) {
     // We can use the existing modal but change the form action
     $('#payBookingId').val(bookingId);
     $('#payVendor').text(vendorName);
-    $('#payamount').text('₵' + amount);
+    $('#payAmount').text('₵' + amount);
     // Store exact amount for the API call
     $('#paymentForm').data('amount', amount);
     openModal('paymentModal');
@@ -132,4 +187,12 @@ $('#paymentForm').submit(function(e) {
             Contact vendor if you are running late.
         `);
     }
+});
+
+// Also trigger loading reviews if the page was opened directly with reviews active
+$(function(){
+    // If reviews view is active on load, fetch reviews
+    if ($('#view-reviews').hasClass('active')) loadReviews();
+    // Bind to nav click to load when switched
+    $('.nav-item[data-target="reviews"]').on('click', function(){ loadReviews(); });
 });

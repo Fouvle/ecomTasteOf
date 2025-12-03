@@ -27,6 +27,9 @@ if (isset($_GET['review_id'])) {
         echo json_encode(['status' => 'error', 'message' => 'Review not found']);
     }
 } else {
-    echo json_encode(['status' => 'error', 'message' => 'No ID provided']);
+    // No specific review_id provided: return all reviews for this customer
+    $customer_id = $_SESSION['customer_id'];
+    $reviews = get_customer_reviews_ctr($customer_id);
+    echo json_encode(['status' => 'success', 'data' => $reviews]);
 }
 ?>
