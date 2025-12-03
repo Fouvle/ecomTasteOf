@@ -97,7 +97,7 @@ $reviews = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
             <nav class="side-nav">
                 <a href="#" class="nav-item active" data-target="overview"><i class="fas fa-th-large"></i> Overview</a>
                 <a href="#" class="nav-item" data-target="bookings"><i class="fas fa-calendar-alt"></i> My Bookings</a>
-                <a href="#" class="nav-item" data-target="reviews"><i class="fas fa-star"></i> My Reviews</a>
+                <a href="my_reviews.php" class="nav-item"><i class="fas fa-star"></i> My Reviews</a>
                 <a href="#" class="nav-item" data-target="settings"><i class="fas fa-cog"></i> Settings</a>
                 <a href="../views/logout.php" class="nav-item" style="color:#ef4444;"><i class="fas fa-sign-out-alt"></i> Logout</a>
             </nav>
@@ -210,7 +210,7 @@ $reviews = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
             <!-- REVIEWS TAB -->
             <div id="view-reviews" class="view-section">
-                <h2><a href = "my_reviews.php">My Reviews</a></h2>
+                <h2>My Reviews</h2>
                 <div id="reviews-container">
                     <!-- Loaded via JS or simple PHP loop if separate table exists -->
                     <p style="color:gray;">You haven't written any reviews yet.</p>
