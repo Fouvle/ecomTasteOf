@@ -2,11 +2,19 @@ $(document).ready(function() {
     
     // Sidebar Navigation
     $('.nav-item').click(function(e) {
+        const target = $(this).data('target');
+
+        // If this nav-item does NOT have a data-target, allow normal navigation (redirect)
+        if (typeof target === 'undefined' || target === '') {
+            // Let the anchor behave normally (no preventDefault)
+            return;
+        }
+
+        // Otherwise handle in-page tab switching
         e.preventDefault();
         $('.nav-item').removeClass('active');
         $(this).addClass('active');
         
-        const target = $(this).data('target');
         $('.view-section').removeClass('active');
         $('#view-' + target).addClass('active');
     });
